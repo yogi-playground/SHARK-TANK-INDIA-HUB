@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shark Tank India Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --red: #E8192C;
+    --dark: #080810;
+    --card: #0f0f1a;
+    --card2: #13131f;
+    --border: #1c1c2e;
+    --muted: #6b6b8f;
+    --gold: #F5C518;
+    --green: #22C55E;
+    --blue: #3B82F6;
+    --text: #e8e8f0;
+    --heading: #ffffff;
+    --strong: #d0d0e8;
+    --nav-bg: rgba(8,8,16,0.88);
+    --shadow: rgba(0,0,0,0.4);
+  }
+
+  html.light {
+    --dark: #f0f0f6;
+    --card: #ffffff;
+    --card2: #eaeaf2;
+    --border: #d4d4e4;
+    --muted: #7070a0;
+    --text: #1a1a2e;
+    --heading: #0a0a18;
+    --strong: #2a2a45;
+    --nav-bg: rgba(240,240,246,0.94);
+    --shadow: rgba(0,0,0,0.10);
+    --gold: #9a6800;
+    --green: #15803d;
+  }
+
+  /* Smooth theme transitions */
+  *, *::before, *::after {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  }
+  /* Don't transition animations/transforms */
+  .page, .card, .chip, .btn-primary, .btn-outline,
+  .pbar-fill, .season-card, .module-item, .check-item {
+    transition: background-color 0.25s ease, border-color 0.25s ease,
+                color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 44px 44px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .logo-badge {
+    width: 34px;
+    height: 34px;
+    background: var(--red);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--heading);
+  }
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+  }
+  .nav-links a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: all 0.18s;
+    cursor: pointer;
+  }
+  .nav-links a:hover { color: var(--heading); background: var(--card2); }
+  .nav-links a.active { color: var(--heading); background: var(--card2); font-weight: 600; }
+
+  /* ─── PAGE SYSTEM ─── */
+  .page { display: none; position: relative; z-index: 1; }
+  .page.active { display: block; animation: fadeUp 0.4s ease; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .section { padding: 48px 0; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { border-color: rgba(232,25,44,0.25); transform: translateY(-2px); box-shadow: 0 8px 32px var(--shadow); }
+
+  /* ─── TYPOGRAPHY ─── */
+  .display { font-family: 'Bebas Neue', cursive; letter-spacing: 3px; line-height: 1; color: var(--heading); }
+  .mono { font-family: 'JetBrains Mono', monospace; color: var(--strong); }
+  .muted { color: var(--muted); }
+  .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.6px; color: var(--muted); font-weight: 600; }
+
+  /* Body text always readable */
+  body, p, span, div { color: inherit; }
+  body { color: var(--text); }
+
+  /* Anything using Bebas Neue inline gets heading colour automatically */
+  [style*="font-family:'Bebas Neue'"],
+  [style*='font-family:"Bebas Neue"'] {
+    color: var(--heading);
+  }
+
+  /* Card titles — bold text inside cards */
+  .card-title { font-weight: 600; color: var(--heading); font-size: 15px; }
+  .card-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* Strong inline text (values, numbers without class) */
+  .val { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--strong); }
+
+  /* ─── BADGES ─── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .badge-funded { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .badge-nodeal { background: rgba(232,25,44,0.12); color: var(--red); border: 1px solid rgba(232,25,44,0.3); }
+  .badge-industry { background: var(--border); color: var(--muted); border: 1px solid transparent; font-size: 10px; }
+
+  /* ─── STAT CARD ─── */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+  .stat-item { text-align: center; }
+  .stat-num { font-family: 'Bebas Neue', cursive; font-size: 36px; letter-spacing: 2px; line-height: 1; color: var(--heading); }
+
+  /* ─── PROGRESS BAR ─── */
+  .pbar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .pbar-fill { height: 100%; background: var(--red); border-radius: 3px; transition: width 1s ease; }
+  .pbar-fill.green { background: var(--green); }
+
+  /* ─── TABLE ─── */
+  table { width: 100%; border-collapse: collapse; }
+  th { background: var(--card2); font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13.5px; vertical-align: middle; color: var(--strong); }
+  tr:hover td { background: rgba(128,128,128,0.06); cursor: pointer; }
+  .table-wrap { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--red); color: white; border: none; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.18s; font-family: 'DM Sans', sans-serif; }
+  .btn-primary:hover { background: #c0101f; }
+  .btn-outline { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 12px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.18s; font-family: 'DM Sans', sans-serif; }
+  .btn-outline:hover { border-color: var(--muted); color: var(--text); }
+  .btn-sm { padding: 7px 14px; font-size: 12px; border-radius: 8px; }
+
+  /* ─── FILTER CHIPS ─── */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { padding: 5px 12px; border-radius: 100px; font-size: 12px; cursor: pointer; border: 1px solid var(--border); background: var(--card2); color: var(--muted); transition: all 0.15s; }
+  .chip:hover { color: var(--text); border-color: var(--muted); }
+  .chip.active { background: var(--red); border-color: var(--red); color: white; }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 40px 32px 32px;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(232,25,44,0.14) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--card2);
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: pulse 2s ease infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  .hero-title { font-family: 'Bebas Neue', cursive; font-size: clamp(60px, 10vw, 110px); letter-spacing: 6px; line-height: 0.9; margin-bottom: 16px; color: var(--heading); }
+  .hero-title span { color: var(--red); }
+  .hero-sub { color: var(--muted); font-size: 17px; max-width: 480px; margin: 0 auto 20px; line-height: 1.6; }
+  .hero-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  /* ─── SEASON CARDS ─── */
+  .season-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .season-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; cursor: pointer; transition: all 0.2s; }
+  .season-card:hover { border-color: rgba(232,25,44,0.35); transform: translateY(-2px); box-shadow: 0 12px 40px var(--shadow); }
+  .season-number { font-family: 'Bebas Neue', cursive; font-size: 72px; color: var(--red); line-height: 1; }
+
+  /* ─── PITCH DETAIL ─── */
+  .detail-grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+  .valuation-explainer { border-left: 3px solid var(--red); padding: 10px 14px; background: rgba(232,25,44,0.06); border-radius: 0 8px 8px 0; font-size: 13px; color: var(--text); line-height: 1.5; margin-top: 16px; opacity: 0.9; }
+  .valuation-explainer.up { border-color: var(--green); background: rgba(34,197,94,0.06); color: var(--text); }
+
+  /* ─── SHARK CHIP ─── */
+  .shark-chip { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 10px; background: var(--dark); border: 1px solid var(--border); margin-bottom: 8px; }
+  .shark-avatar { width: 32px; height: 32px; border-radius: 50%; background: rgba(232,25,44,0.2); color: var(--red); font-family: 'Bebas Neue'; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+
+  /* ─── CHARTS ─── */
+  .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+  .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+
+  /* ─── PREP MODULE ─── */
+  .module-item { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.18s; margin-bottom: 8px; }
+  .module-item:hover { border-color: rgba(232,25,44,0.3); }
+  .module-cat { font-size: 10px; padding: 2px 8px; border-radius: 100px; background: var(--border); color: var(--muted); }
+
+  /* ─── STARS ─── */
+  .stars { display: flex; gap: 3px; }
+  .star { font-size: 18px; cursor: pointer; color: var(--border); transition: color 0.1s; }
+  .star.on { color: var(--gold); }
+
+  /* ─── TEXTAREA / INPUT ─── */
+  textarea, input, select {
+    width: 100%;
+    background: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.18s;
+    resize: none;
+  }
+  textarea:focus, input:focus, select:focus { border-color: rgba(232,25,44,0.5); }
+  ::placeholder { color: var(--muted); }
+
+  /* ─── CHECKLIST ─── */
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); background: var(--card2); cursor: pointer; transition: all 0.15s; margin-bottom: 6px; }
+  .check-item:hover { border-color: var(--muted); }
+  .check-item .check-text { color: var(--text); }
+  .check-item.done { border-color: rgba(34,197,94,0.25); background: rgba(34,197,94,0.05); }
+  .check-item.done .check-text { text-decoration: line-through; color: var(--muted); }
+  .checkmark { width: 18px; height: 18px; border: 1.5px solid var(--muted); border-radius: 4px; flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .check-item.done .checkmark { background: var(--green); border-color: var(--green); }
+
+  /* ─── Q CARD ─── */
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; }
+  .q-hint { background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--text); margin-top: 12px; display: none; line-height: 1.6; }
+  .q-hint.visible { display: block; animation: fadeUp 0.3s ease; }
+
+  /* ─── OUTLINE STEPS ─── */
+  .step-row { display: flex; gap: 4px; margin-bottom: 24px; }
+  .step-dot { flex: 1; height: 5px; border-radius: 3px; background: var(--border); transition: background 0.3s; }
+  .step-dot.active { background: var(--red); }
+  .step-dot.done { background: var(--green); }
+
+  /* ─── TOOLTIP ─── */
+  .tip { position: relative; border-bottom: 1px dashed rgba(90,90,122,0.5); cursor: help; }
+  .tip::before { content: attr(data-t); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--card2); color: var(--heading); font-size: 11px; padding: 5px 10px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 50; border: 1px solid var(--border); box-shadow: 0 4px 12px var(--shadow); }
+  .tip:hover::before { opacity: 1; }
+
+  /* ─── LEARN FROM ─── */
+  .learn-box { background: rgba(245,197,24,0.05); border: 1px solid rgba(245,197,24,0.2); border-radius: 12px; padding: 18px 20px; font-size: 13px; line-height: 1.6; }
+  .learn-box li { color: var(--text); opacity: 0.85; margin-top: 6px; }
+
+  /* ─── SECTION HEADER ─── */
+  .sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .sec-title { font-family: 'Bebas Neue', cursive; font-size: 30px; letter-spacing: 3px; color: var(--heading); }
+
+  /* ─── OWNERSHIP PIE ─── */
+  .pie-legend { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .pie-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; }
+  .pie-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── THEME TOGGLE ─── */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .theme-toggle-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .theme-toggle-option.active {
+    background: var(--card);
+    color: var(--text);
+    box-shadow: 0 1px 4px var(--shadow);
+  }
+  html.light .theme-toggle-option.active {
+    box-shadow: 0 1px 6px rgba(0,0,0,0.15);
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 0 16px; }
+    .logo-text { display: none; }
+    .container { padding: 0 16px; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .hero { padding: 48px 16px; }
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(6), td:nth-child(6) { display: none; }
+    .toggle-label { display: none; }
+    .theme-toggle-option { padding: 5px 8px; }
+  }
+  /* ─── DASHBOARD ─── */
+  #db-step-nav { display:flex; }
+  input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:3px; background:var(--border); outline:none; border:none; padding:0; cursor:pointer; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%; background:var(--gold); cursor:pointer; border:2px solid var(--card); box-shadow:0 0 0 2px var(--gold); }
+  input[type=range]::-moz-range-thumb { width:18px; height:18px; border-radius:50%; background:var(--gold); cursor:pointer; border:2px solid var(--card); }
+  select option { background: var(--card); color: var(--text); }
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav>
+  <div class="logo" onclick="showPage('home')">
+    <div class="logo-badge">STI</div>
+    <div class="logo-text">SHARK TANK INDIA HUB</div>
+  </div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">🏠 Home</a></li>
+    <li><a onclick="showPage('seasons')" id="nav-seasons">📺 Seasons</a></li>
+    <li><a onclick="showPage('analytics')" id="nav-analytics">📊 Analytics</a></li>
+    <li><a onclick="showPage('dashboard')" id="nav-dashboard">💡 My Dashboard</a></li>
+    <li><a onclick="showPage('learn')" id="nav-learn">🎯 Get Ready</a></li>
+  </ul>
+  <div class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+    <div class="theme-toggle-option" id="theme-dark"><span>🌙</span> <span class="toggle-label">Dark</span></div>
+    <div class="theme-toggle-option" id="theme-light"><span>☀️</span> <span class="toggle-label">Light</span></div>
+  </div>
+</nav>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-tag"><div class="pulse"></div> All 3 seasons · 12 sample pitches</div>
+    <h1 class="hero-title">SHARK TANK<br><span>INDIA HUB</span></h1>
+    <p class="hero-sub">Explore every pitch, deal, and shark from all 3 seasons — with analytics for viewers and prep tools for founders.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('seasons')">Explore Pitches →</button>
+      <button class="btn-outline" onclick="showPage('learn')">📚 Prep for Your Pitch</button>
+      <button class="btn-outline" onclick="showPage('dashboard')" style="border-color:var(--gold);color:var(--gold)">📊 Build Your Data Dashboard</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Global stats -->
+    <div class="stat-grid" style="margin-bottom:40px">
+      <div class="card stat-item"><div class="stat-num">3</div><div class="label" style="margin-top:4px">Seasons</div></div>
+      <div class="card stat-item"><div class="stat-num">678</div><div class="label" style="margin-top:4px">Total Pitches</div></div>
+      <div class="card stat-item"><div class="stat-num" style="color:var(--green)">416 <small style="font-size:18px">(61%)</small></div><div class="label" style="margin-top:4px">Deals Closed</div></div>
+      <div class="card stat-item"><div class="stat-num" style="color:var(--gold)">₹161Cr</div><div class="label" style="margin-top:4px">Total Invested</div></div>
+    </div>
+
+    <!-- Season cards -->
+    <div class="sec-header">
+      <div class="sec-title">SEASONS</div>
+      <button class="btn-outline btn-sm" onclick="showPage('seasons')">View All →</button>
+    </div>
+    <div class="season-grid" style="margin-bottom:56px">
+      <div class="season-card" onclick="showSeasonDetail(1)">
+        <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:16px">
+          <div><div class="label">Season</div><div class="season-number">1</div></div>
+          <span class="muted" style="font-size:13px">2021–22</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div style="display:flex;justify-content:space-between"><span class="muted">Episodes</span><span style="color:var(--text)">35</span></div>
+          <div style="display:flex;justify-content:space-between"><span class="muted">Deals</span><span style="color:var(--green)">117</span></div>
+          <div style="display:flex;justify-content:space-between"><span class="muted">Invested</span><span style="color:var(--gold)">₹42Cr</span></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="label" style="margin-bottom:5px">Deal Rate — 59%</div>
+          <div class="pbar"><div class="pbar-fill" style="width:59%"></div></div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:var(--muted)">View pitches →</div>
+      </div>
+
+      <div class="season-card" onclick="showSeasonDetail(2)">
+        <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:16px">
+          <div><div class="label">Season</div><div class="season-number">2</div></div>
+          <span class="muted" style="font-size:13px">2023</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div style="display:flex;justify-content:space-between"><span class="muted">Episodes</span><span style="color:var(--text)">42</span></div>
+          <div style="display:flex;justify-content:space-between"><span class="muted">Deals</span><span style="color:var(--green)">141</span></div>
+          <div style="display:flex;justify-content:space-between"><span class="muted">Invested</span><span style="color:var(--gold)">₹51Cr</span></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="label" style="margin-bottom:5px">Deal Rate — 64%</div>
+          <div class="pbar"><div class="pbar-fill" style="width:64%"></div></div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:var(--muted)">View pitches →</div>
+      </div>
+
+      <div class="season-card" onclick="showSeasonDetail(3)">
+        <div style="display:flex;align-items:start;justify-content:space-between;margin-bottom:16px">
+          <div><div class="label">Season</div><div class="season-number">3</div></div>
+          <span class="muted" style="font-size:13px">2024</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div style="display:flex;justify-content:space-between"><span class="muted">Episodes</span><span style="color:var(--text)">50</span></div>
+          <div style="display:flex;justify-content:space-between"><span class="muted">Deals</span><span style="color:var(--green)">158</span></div>
+          <div style="display:flex;justify-content:space-between"><span class="muted">Invested</span><span style="color:var(--gold)">₹68Cr</span></div>
+        </div>
+        <div style="margin-top:16px">
+          <div class="label" style="margin-bottom:5px">Deal Rate — 61%</div>
+          <div class="pbar"><div class="pbar-fill" style="width:61%"></div></div>
+        </div>
+        <div style="margin-top:14px;font-size:12px;color:var(--muted)">View pitches →</div>
+      </div>
+    </div>
+
+    <!-- Recent deals -->
+    <div class="sec-header">
+      <div class="sec-title">RECENT DEALS</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:64px">
+      <div class="card" onclick="showPitchDetail('heads-up')" style="cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
+          <div><div style="font-weight:600;margin-bottom:3px;color:var(--heading)">Heads Up For Tails</div><div class="muted" style="font-size:12px">S1 E1 · Pets</div></div>
+          <span class="badge badge-funded">✓ Funded</span>
+        </div>
+        <div style="display:flex;gap:20px;font-size:13px">
+          <div><div class="label">Deal</div><div class="mono" style="font-weight:600">₹1.3Cr</div></div>
+          <div><div class="label">Equity</div><div class="mono" style="font-weight:600">2%</div></div>
+          <div><div class="label">Sharks</div><div style="font-size:12px;color:var(--text)">Aman, Anupam</div></div>
+        </div>
+      </div>
+
+      <div class="card" onclick="showPitchDetail('edurev')" style="cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
+          <div><div style="font-weight:600;margin-bottom:3px;color:var(--heading)">EduRev</div><div class="muted" style="font-size:12px">S1 E4 · EdTech</div></div>
+          <span class="badge badge-funded">✓ Funded</span>
+        </div>
+        <div style="display:flex;gap:20px;font-size:13px">
+          <div><div class="label">Deal</div><div class="mono" style="font-weight:600">₹1.5Cr</div></div>
+          <div><div class="label">Equity</div><div class="mono" style="font-weight:600">7%</div></div>
+          <div><div class="label">Sharks</div><div style="font-size:12px;color:var(--text)">Peyush</div></div>
+        </div>
+      </div>
+
+      <div class="card" onclick="showPitchDetail('foxtale')" style="cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
+          <div><div style="font-weight:600;margin-bottom:3px;color:var(--heading)">Foxtale</div><div class="muted" style="font-size:12px">S2 E1 · Beauty</div></div>
+          <span class="badge badge-funded">✓ Funded</span>
+        </div>
+        <div style="display:flex;gap:20px;font-size:13px">
+          <div><div class="label">Deal</div><div class="mono" style="font-weight:600">₹2Cr</div></div>
+          <div><div class="label">Equity</div><div class="mono" style="font-weight:600">2%</div></div>
+          <div><div class="label">Sharks</div><div style="font-size:12px;color:var(--text)">Namita</div></div>
+        </div>
+      </div>
+
+      <div class="card" onclick="showPitchDetail('skippi')" style="cursor:pointer">
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
+          <div><div style="font-weight:600;margin-bottom:3px;color:var(--heading)">Skippi Ice Pops</div><div class="muted" style="font-size:12px">S1 E2 · F&B</div></div>
+          <span class="badge badge-funded">✓ Funded</span>
+        </div>
+        <div style="display:flex;gap:20px;font-size:13px">
+          <div><div class="label">Deal</div><div class="mono" style="font-weight:600">₹50L</div></div>
+          <div><div class="label">Equity</div><div class="mono" style="font-weight:600">5%</div></div>
+          <div><div class="label">Sharks</div><div style="font-size:12px;color:var(--text)">All 5</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:48px;text-align:center;margin-bottom:48px;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 50% 100%,rgba(232,25,44,0.08),transparent);pointer-events:none"></div>
+      <div style="position:relative">
+        <div style="font-size:36px;margin-bottom:16px">🦈</div>
+        <div class="display" style="font-size:42px;margin-bottom:12px">READY TO PITCH?</div>
+        <p class="muted" style="max-width:420px;margin:0 auto 28px;line-height:1.6">Practice investor questions, build your pitch outline, and learn from real Shark Tank India deals.</p>
+        <button class="btn-primary" onclick="showPage('learn')">Start Preparing →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DASHBOARD ═══════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="container section">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:36px">
+      <div class="hero-tag" style="display:inline-flex;margin-bottom:16px">📊 Investor View</div>
+      <div class="display" style="font-size:clamp(36px,6vw,64px)">BUILD YOUR<br><span style="color:var(--gold)">DATA DASHBOARD</span></div>
+      <p class="muted" style="max-width:500px;margin:12px auto 0;font-size:15px;line-height:1.6">Fill in your business details and instantly see how an investor reads your company — valuations, unit economics, health signals, and red flags.</p>
+    </div>
+
+    <!-- Step progress -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:40px;flex-wrap:wrap;gap:4px" id="db-step-nav"></div>
+
+    <!-- Form steps -->
+    <div id="db-form-wrap" style="max-width:760px;margin:0 auto">
+
+      <!-- STEP 1: Business Basics -->
+      <div class="db-step" id="db-step-1">
+        <div class="card">
+          <div class="display" style="font-size:22px;margin-bottom:4px">STEP 1 — BUSINESS BASICS</div>
+          <div class="muted" style="font-size:13px;margin-bottom:24px">Tell us what you're building and who you're building it for.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="grid-column:1/-1">
+              <div class="label" style="margin-bottom:6px">Company / Startup Name</div>
+              <input type="text" id="db-name" placeholder="e.g. RestoPilot" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Industry</div>
+              <select id="db-industry">
+                <option value="">Select industry</option>
+                <option>Food & Beverage</option>
+                <option>EdTech</option>
+                <option>Healthcare / MedTech</option>
+                <option>Beauty & Skincare</option>
+                <option>Fashion & Apparel</option>
+                <option>FinTech</option>
+                <option>SaaS / B2B Tech</option>
+                <option>D2C Consumer Brand</option>
+                <option>Pets</option>
+                <option>Agri / Rural Tech</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Business Stage</div>
+              <select id="db-stage">
+                <option value="">Select stage</option>
+                <option value="idea">Idea Stage (pre-product)</option>
+                <option value="pre-revenue">Pre-Revenue (product built, no sales)</option>
+                <option value="early">Early Revenue (₹0–₹50L ARR)</option>
+                <option value="scaling">Scaling (₹50L+ ARR)</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Target Market</div>
+              <select id="db-market">
+                <option value="">Select market</option>
+                <option>Tier 1 Cities (India)</option>
+                <option>Pan India (Tier 1 + 2)</option>
+                <option>Pan India (All Tiers)</option>
+                <option>South Asia</option>
+                <option>Global</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Primary Target Customer</div>
+              <input type="text" id="db-customer" placeholder="e.g. Small restaurant owners, Urban women 25–35" />
+            </div>
+            <div style="grid-column:1/-1">
+              <div class="label" style="margin-bottom:6px">One-line Description</div>
+              <input type="text" id="db-tagline" placeholder="e.g. WhatsApp-first inventory app for Tier 2 restaurants" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:16px">
+          <button class="btn-primary" onclick="dbNext(1)">Next: Financials →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Financials -->
+      <div class="db-step" id="db-step-2" style="display:none">
+        <div class="card">
+          <div class="display" style="font-size:22px;margin-bottom:4px">STEP 2 — FINANCIALS</div>
+          <div class="muted" style="font-size:13px;margin-bottom:24px">Revenue and margin numbers. Enter 0 if pre-revenue — we'll flag it clearly.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div class="label" style="margin-bottom:6px">Annual Revenue (ARR) <span class="muted">₹ Lakhs</span></div>
+              <input type="number" id="db-revenue" placeholder="e.g. 24 (for ₹24L)" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Monthly Recurring Revenue <span class="muted">₹ Lakhs</span></div>
+              <input type="number" id="db-mrr" placeholder="e.g. 2 (for ₹2L/mo)" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Gross Margin <span class="muted">%</span></div>
+              <input type="number" id="db-gross-margin" placeholder="e.g. 62" min="0" max="100" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">EBITDA <span class="muted">₹ Lakhs (negative = loss)</span></div>
+              <input type="number" id="db-ebitda" placeholder="e.g. -8 (burning ₹8L/mo)" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Monthly Burn Rate <span class="muted">₹ Lakhs</span></div>
+              <input type="number" id="db-burn" placeholder="e.g. 5" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Cash in Bank / Runway <span class="muted">₹ Lakhs</span></div>
+              <input type="number" id="db-cash" placeholder="e.g. 30" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Revenue Growth MoM <span class="muted">%</span></div>
+              <input type="number" id="db-growth" placeholder="e.g. 22" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Gross Profit (Last Month) <span class="muted">₹ Lakhs</span></div>
+              <input type="number" id="db-gross-profit" placeholder="e.g. 1.5" min="0" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:16px">
+          <button class="btn-outline" onclick="dbBack(2)">← Back</button>
+          <button class="btn-primary" onclick="dbNext(2)">Next: Unit Economics →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Unit Economics -->
+      <div class="db-step" id="db-step-3" style="display:none">
+        <div class="card">
+          <div class="display" style="font-size:22px;margin-bottom:4px">STEP 3 — UNIT ECONOMICS</div>
+          <div class="muted" style="font-size:13px;margin-bottom:24px">The numbers investors stress-test the hardest. Be honest — the dashboard shows the full picture.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div class="label" style="margin-bottom:6px">Customer Acquisition Cost (CAC) <span class="muted">₹</span></div>
+              <input type="number" id="db-cac" placeholder="e.g. 850 (blended)" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Customer Lifetime Value (LTV) <span class="muted">₹</span></div>
+              <input type="number" id="db-ltv" placeholder="e.g. 4200" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Average Order / Ticket Value <span class="muted">₹</span></div>
+              <input type="number" id="db-aov" placeholder="e.g. 700" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Purchase Frequency <span class="muted">times/year</span></div>
+              <input type="number" id="db-frequency" placeholder="e.g. 6" min="0" step="0.5" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Avg Customer Retention <span class="muted">months</span></div>
+              <input type="number" id="db-retention" placeholder="e.g. 18" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Payback Period <span class="muted">months</span></div>
+              <input type="number" id="db-payback" placeholder="e.g. 4" min="0" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:16px">
+          <button class="btn-outline" onclick="dbBack(3)">← Back</button>
+          <button class="btn-primary" onclick="dbNext(3)">Next: Ownership & Ask →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Ownership & Ask -->
+      <div class="db-step" id="db-step-4" style="display:none">
+        <div class="card">
+          <div class="display" style="font-size:22px;margin-bottom:4px">STEP 4 — OWNERSHIP & ASK</div>
+          <div class="muted" style="font-size:13px;margin-bottom:24px">How the company is structured and what you're asking for.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div class="label" style="margin-bottom:6px">Founder(s) Equity <span class="muted">%</span></div>
+              <input type="number" id="db-founder-equity" placeholder="e.g. 80" min="0" max="100" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Investor / Angel Equity <span class="muted">%</span></div>
+              <input type="number" id="db-investor-equity" placeholder="e.g. 15" min="0" max="100" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">ESOP Pool <span class="muted">%</span></div>
+              <input type="number" id="db-esop" placeholder="e.g. 5" min="0" max="30" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Funding Ask <span class="muted">₹ Lakhs</span></div>
+              <input type="number" id="db-ask" placeholder="e.g. 75" min="0" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Equity Offered for Ask <span class="muted">%</span></div>
+              <input type="number" id="db-ask-equity" placeholder="e.g. 5" min="0" max="49" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Total Funding Raised So Far <span class="muted">₹ Lakhs</span></div>
+              <input type="number" id="db-raised" placeholder="e.g. 0" min="0" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:16px">
+          <button class="btn-outline" onclick="dbBack(4)">← Back</button>
+          <button class="btn-primary" onclick="dbNext(4)">Next: Valuation →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Valuation -->
+      <div class="db-step" id="db-step-5" style="display:none">
+        <div class="card">
+          <div class="display" style="font-size:22px;margin-bottom:4px">STEP 5 — VALUATION</div>
+          <div class="muted" style="font-size:13px;margin-bottom:24px">Set your revenue multiple — the dashboard will calculate and benchmark your implied valuation.</div>
+
+          <!-- Revenue multiple slider -->
+          <div style="margin-bottom:28px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div class="label">Revenue Multiple</div>
+              <div style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--gold)" id="db-multiple-display">8x</div>
+            </div>
+            <input type="range" id="db-multiple" min="1" max="50" value="8" step="0.5"
+              style="width:100%;accent-color:var(--gold);height:6px;cursor:pointer;background:var(--border);border-radius:3px;border:none;padding:0"
+              oninput="updateMultiple(this.value)" />
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px">
+              <span>1x (distressed)</span><span>10x</span><span>25x</span><span>50x (hyper-growth)</span>
+            </div>
+          </div>
+
+          <!-- Benchmark multiples table -->
+          <div style="background:var(--card2);border-radius:10px;padding:14px 16px;margin-bottom:20px">
+            <div class="label" style="margin-bottom:10px">Typical Revenue Multiples by Sector</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span class="muted">D2C / Consumer Brand</span><span class="mono">3–8x</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span class="muted">Food & Beverage</span><span class="mono">2–6x</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span class="muted">SaaS / B2B Tech</span><span class="mono">8–20x</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span class="muted">EdTech</span><span class="mono">5–12x</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span class="muted">Healthcare / MedTech</span><span class="mono">4–10x</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span class="muted">FinTech</span><span class="mono">6–15x</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0"><span class="muted">Fashion & Apparel</span><span class="mono">2–5x</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0"><span class="muted">Beauty & Skincare</span><span class="mono">4–10x</span></div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div>
+              <div class="label" style="margin-bottom:6px">EBITDA Multiple (optional) <span class="muted">x</span></div>
+              <input type="number" id="db-ebitda-multiple" placeholder="e.g. 12" min="1" max="100" />
+            </div>
+            <div>
+              <div class="label" style="margin-bottom:6px">Your Pre-Money Valuation Ask <span class="muted">₹ Crores</span></div>
+              <input type="number" id="db-valuation-ask" placeholder="e.g. 15" min="0" step="0.5" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:16px">
+          <button class="btn-outline" onclick="dbBack(5)">← Back</button>
+          <button class="btn-primary" style="background:var(--gold);color:#000;font-weight:700" onclick="dbBuild()">⚡ Build My Dashboard</button>
+        </div>
+      </div>
+
+    </div><!-- /db-form-wrap -->
+
+    <!-- Dashboard output (hidden until built) -->
+    <div id="db-output" style="display:none;margin-top:8px">
+
+      <!-- Startup header -->
+      <div id="db-startup-header" style="margin-bottom:28px"></div>
+
+      <!-- Health score + quick KPIs -->
+      <div id="db-kpi-row" style="margin-bottom:28px"></div>
+
+      <!-- Main dashboard grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px" id="db-main-grid"></div>
+
+      <!-- Unit economics deep dive -->
+      <div id="db-unit-econ" style="margin-bottom:20px"></div>
+
+      <!-- Valuation section -->
+      <div id="db-valuation-section" style="margin-bottom:20px"></div>
+
+      <!-- Ownership chart -->
+      <div id="db-ownership-section" style="margin-bottom:20px"></div>
+
+      <!-- Red flags + strengths -->
+      <div id="db-signals" style="margin-bottom:32px"></div>
+
+      <!-- Actions -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--border)">
+        <button class="btn-outline" onclick="dbEdit()">✏️ Edit Inputs</button>
+        <button class="btn-outline" onclick="showPage('learn')">→ Practice Investor Q&A</button>
+        <button class="btn-outline" onclick="showPage('seasons')">→ Compare with Real Pitches</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ SEASONS LIST ═══════════════ -->
+<div id="page-seasons" class="page">
+  <div class="container section">
+    <div class="sec-header">
+      <div><div class="display" style="font-size:48px">ALL PITCHES</div><div class="muted" style="margin-top:4px">Browse every startup from Shark Tank India</div></div>
+    </div>
+
+    <!-- Filters -->
+    <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:20px">
+      <div class="chips" id="season-filter">
+        <div class="chip active" data-filter="season" data-val="all" onclick="filterPitches(this)">All Seasons</div>
+        <div class="chip" data-filter="season" data-val="1" onclick="filterPitches(this)">Season 1</div>
+        <div class="chip" data-filter="season" data-val="2" onclick="filterPitches(this)">Season 2</div>
+        <div class="chip" data-filter="season" data-val="3" onclick="filterPitches(this)">Season 3</div>
+      </div>
+      <div class="chips" id="industry-filter">
+        <div class="chip active" data-filter="industry" data-val="all" onclick="filterPitches(this)">All Industries</div>
+        <div class="chip" data-filter="industry" data-val="Food & Beverage" onclick="filterPitches(this)">Food & Bev</div>
+        <div class="chip" data-filter="industry" data-val="EdTech" onclick="filterPitches(this)">EdTech</div>
+        <div class="chip" data-filter="industry" data-val="Beauty & Skincare" onclick="filterPitches(this)">Beauty</div>
+        <div class="chip" data-filter="industry" data-val="Pets" onclick="filterPitches(this)">Pets</div>
+      </div>
+      <div class="chips" id="deal-filter">
+        <div class="chip active" data-filter="deal" data-val="all" onclick="filterPitches(this)">All</div>
+        <div class="chip" data-filter="deal" data-val="funded" onclick="filterPitches(this)">✓ Funded</div>
+        <div class="chip" data-filter="deal" data-val="nodeal" onclick="filterPitches(this)">✗ No Deal</div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Ep</th>
+            <th>Startup</th>
+            <th>Industry</th>
+            <th>Ask</th>
+            <th>Final Deal</th>
+            <th>Sharks</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="pitches-tbody"></tbody>
+      </table>
+    </div>
+    <div id="pitch-count" class="muted" style="font-size:12px;margin-top:10px"></div>
+  </div>
+</div>
+
+<!-- ═══════════════ PITCH DETAIL ═══════════════ -->
+<div id="page-pitch-detail" class="page">
+  <div class="container section" id="pitch-detail-content"></div>
+</div>
+
+<!-- ═══════════════ SEASON DETAIL ═══════════════ -->
+<div id="page-season-detail" class="page">
+  <div class="container section" id="season-detail-content"></div>
+</div>
+
+<!-- ═══════════════ ANALYTICS ═══════════════ -->
+<div id="page-analytics" class="page">
+  <div class="container section">
+    <div style="margin-bottom:32px">
+      <div class="display" style="font-size:48px">ANALYTICS</div>
+      <div class="muted" style="margin-top:4px">Data across all 3 Shark Tank India seasons</div>
+    </div>
+
+    <!-- Global stats -->
+    <div class="stat-grid" style="margin-bottom:32px">
+      <div class="card stat-item"><div class="stat-num">678</div><div class="label" style="margin-top:4px">Total Pitches</div></div>
+      <div class="card stat-item"><div class="stat-num" style="color:var(--green)">416</div><div class="label" style="margin-top:4px">Deals Closed</div></div>
+      <div class="card stat-item"><div class="stat-num">61%</div><div class="label" style="margin-top:4px">Avg Deal Rate</div></div>
+      <div class="card stat-item"><div class="stat-num" style="color:var(--gold)">₹161Cr</div><div class="label" style="margin-top:4px">Total Invested</div></div>
+    </div>
+
+    <div class="charts-grid" style="margin-bottom:20px">
+      <!-- Season comparison -->
+      <div class="chart-card">
+        <div style="font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;margin-bottom:4px;color:var(--heading)">SEASON COMPARISON</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:18px">More pitches each season — but deal quality has improved more than quantity.</div>
+        <canvas id="chartSeasons" height="220"></canvas>
+      </div>
+      <!-- Industry pie -->
+      <div class="chart-card">
+        <div style="font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;margin-bottom:4px;color:var(--heading)">FUNDED BY SECTOR</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:18px">Food & Beverage dominates — driven by India's D2C boom and consumer appetite.</div>
+        <canvas id="chartIndustry" height="220"></canvas>
+      </div>
+      <!-- Shark activity -->
+      <div class="chart-card">
+        <div style="font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;margin-bottom:4px;color:var(--heading)">SHARK ACTIVITY</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:18px">Anupam is the most active investor across seasons. Ashneer (S1 only) had fewer but high-conviction bets.</div>
+        <canvas id="chartSharks" height="220"></canvas>
+      </div>
+      <!-- Deal structure -->
+      <div class="chart-card">
+        <div style="font-family:'Bebas Neue';font-size:20px;letter-spacing:2px;margin-bottom:4px;color:var(--heading)">DEAL STRUCTURES</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:18px">Equity deals dominate. Royalty structures are rare but signal tough negotiations.</div>
+        <canvas id="chartDealType" height="220"></canvas>
+      </div>
+    </div>
+
+    <!-- Industry table -->
+    <div class="card" style="margin-top:8px">
+      <div style="font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;margin-bottom:4px;color:var(--heading)">INDUSTRY BREAKDOWN</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:18px">Funded vs not funded by sector — deal rate shows which industries sharks prefer.</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Industry</th><th>Total Pitches</th><th>Funded</th><th>Deal Rate</th><th>Total Invested</th></tr></thead>
+          <tbody>
+            <tr><td>Food & Beverage</td><td>148</td><td>96</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="width:80px"><div class="pbar-fill" style="width:65%"></div></div><span class="mono muted" style="font-size:11px">65%</span></div></td><td style="color:var(--gold)" class="mono">₹38.4Cr</td></tr>
+            <tr><td>Fashion & Apparel</td><td>82</td><td>48</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="width:80px"><div class="pbar-fill" style="width:59%"></div></div><span class="mono muted" style="font-size:11px">59%</span></div></td><td style="color:var(--gold)" class="mono">₹19.2Cr</td></tr>
+            <tr><td>EdTech</td><td>65</td><td>41</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="width:80px"><div class="pbar-fill" style="width:63%"></div></div><span class="mono muted" style="font-size:11px">63%</span></div></td><td style="color:var(--gold)" class="mono">₹24.6Cr</td></tr>
+            <tr><td>Healthcare</td><td>54</td><td>29</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="width:80px"><div class="pbar-fill" style="width:54%"></div></div><span class="mono muted" style="font-size:11px">54%</span></div></td><td style="color:var(--gold)" class="mono">₹17.4Cr</td></tr>
+            <tr><td>Beauty & Skincare</td><td>47</td><td>33</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="width:80px"><div class="pbar-fill" style="width:70%"></div></div><span class="mono muted" style="font-size:11px">70%</span></div></td><td style="color:var(--gold)" class="mono">₹19.8Cr</td></tr>
+            <tr><td>Fintech</td><td>38</td><td>18</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="width:80px"><div class="pbar-fill" style="width:47%"></div></div><span class="mono muted" style="font-size:11px">47%</span></div></td><td style="color:var(--gold)" class="mono">₹12.6Cr</td></tr>
+            <tr><td>Pets</td><td>22</td><td>16</td><td><div style="display:flex;align-items:center;gap:8px"><div class="pbar" style="width:80px"><div class="pbar-fill" style="width:73%"></div></div><span class="mono muted" style="font-size:11px">73%</span></div></td><td style="color:var(--gold)" class="mono">₹9.6Cr</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LEARN ═══════════════ -->
+<div id="page-learn" class="page">
+  <div class="container section">
+    <div style="text-align:center;margin-bottom:48px">
+      <div class="hero-tag" style="display:inline-flex;margin-bottom:20px">📚 For founders</div>
+      <div class="display" style="font-size:clamp(40px,7vw,72px)">GET READY FOR<br><span style="color:var(--red)">SHARK TANK</span></div>
+      <p class="muted" style="max-width:480px;margin:14px auto 0;font-size:16px;line-height:1.6">Learn from real pitches, practice investor questions, and build your pitch structure — step by step.</p>
+    </div>
+
+    <!-- Stage selector -->
+    <div style="margin-bottom:40px">
+      <div class="label" style="text-align:center;margin-bottom:14px">Where are you today?</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+        <button class="stage-btn" onclick="selectStage('idea',this)" style="padding:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;cursor:pointer;text-align:left;transition:all 0.2s;color:var(--text);font-family:'DM Sans',sans-serif">
+          <div style="font-weight:600;margin-bottom:4px;color:var(--heading)">Idea Stage</div>
+          <div style="font-size:12px;color:var(--muted)">Pre-revenue, still validating</div>
+        </button>
+        <button class="stage-btn" onclick="selectStage('early',this)" style="padding:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;cursor:pointer;text-align:left;transition:all 0.2s;color:var(--text);font-family:'DM Sans',sans-serif">
+          <div style="font-weight:600;margin-bottom:4px;color:var(--heading)">Early Revenue</div>
+          <div style="font-size:12px;color:var(--muted)">₹0–₹50L revenue, finding PMF</div>
+        </button>
+        <button class="stage-btn" onclick="selectStage('scaling',this)" style="padding:18px;background:var(--card);border:1px solid var(--border);border-radius:12px;cursor:pointer;text-align:left;transition:all 0.2s;color:var(--text);font-family:'DM Sans',sans-serif">
+          <div style="font-weight:600;margin-bottom:4px;color:var(--heading)">Scaling</div>
+          <div style="font-size:12px;color:var(--muted)">₹50L+ revenue, ready to grow</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Practice tools -->
+    <div class="sec-header"><div class="sec-title">PRACTICE TOOLS</div></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:40px">
+      <div class="card" onclick="showTab('mock')" style="cursor:pointer">
+        <div style="font-size:28px;margin-bottom:10px">💬</div>
+        <div style="font-weight:600;margin-bottom:5px;color:var(--heading)">Mock Q&A</div>
+        <div class="muted" style="font-size:13px">Practice answering real investor questions by category and difficulty.</div>
+        <div style="margin-top:12px;font-size:12px;color:var(--red)">Start →</div>
+      </div>
+      <div class="card" onclick="showTab('checklist')" style="cursor:pointer">
+        <div style="font-size:28px;margin-bottom:10px">✅</div>
+        <div style="font-weight:600;margin-bottom:5px;color:var(--heading)">Pitch Checklist</div>
+        <div class="muted" style="font-size:13px">Get a personalised list of questions you need to be ready for.</div>
+        <div style="margin-top:12px;font-size:12px;color:var(--gold)">Generate →</div>
+      </div>
+      <div class="card" onclick="showTab('outline')" style="cursor:pointer">
+        <div style="font-size:28px;margin-bottom:10px">📝</div>
+        <div style="font-weight:600;margin-bottom:5px;color:var(--heading)">Pitch Outline Builder</div>
+        <div class="muted" style="font-size:13px">Build your pitch structure section by section and download it.</div>
+        <div style="margin-top:12px;font-size:12px;color:var(--green)">Build →</div>
+      </div>
+    </div>
+
+    <!-- Tab content -->
+    <div id="learn-tabs">
+      <!-- Mock Q&A -->
+      <div id="tab-mock" style="display:none">
+        <div class="sec-header"><div class="sec-title">MOCK Q&A</div></div>
+        <div class="chips" style="margin-bottom:16px" id="qa-cats">
+          <div class="chip active" onclick="setQACat(this,'all')">All</div>
+          <div class="chip" onclick="setQACat(this,'Business Basics')">Business Basics</div>
+          <div class="chip" onclick="setQACat(this,'Finance')">Finance</div>
+          <div class="chip" onclick="setQACat(this,'Market')">Market</div>
+          <div class="chip" onclick="setQACat(this,'Valuation')">Valuation</div>
+          <div class="chip" onclick="setQACat(this,'Operations')">Operations</div>
+        </div>
+        <div class="q-card">
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:16px">
+            <div>
+              <div style="display:flex;gap:8px;margin-bottom:8px">
+                <span class="badge badge-industry" id="q-cat-label">Business Basics</span>
+                <span id="q-diff" style="font-size:11px;color:var(--green);font-weight:600">Easy</span>
+              </div>
+              <div style="font-size:18px;font-weight:600;line-height:1.4;color:var(--heading)" id="q-text">Explain your business in 30 seconds.</div>
+            </div>
+            <div class="mono muted" style="font-size:12px;flex-shrink:0" id="q-counter">1 / 11</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px" id="q-tags"></div>
+          <textarea rows="5" placeholder="Write your answer here..." id="q-answer"></textarea>
+          <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+            <span class="muted" style="font-size:13px">Confidence:</span>
+            <div class="stars" id="q-stars">
+              <span class="star" onclick="setRating(1)">★</span>
+              <span class="star" onclick="setRating(2)">★</span>
+              <span class="star" onclick="setRating(3)">★</span>
+              <span class="star" onclick="setRating(4)">★</span>
+              <span class="star" onclick="setRating(5)">★</span>
+            </div>
+            <span class="muted" style="font-size:12px" id="q-rating-label"></span>
+          </div>
+          <div id="q-hint" class="q-hint"></div>
+          <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
+            <button class="btn-primary" onclick="nextQuestion()">Next Question →</button>
+            <button class="btn-outline" onclick="toggleHint()">💡 Show what a good answer covers</button>
+            <button class="btn-outline" onclick="skipQuestion()" style="margin-left:auto">Skip</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div id="tab-checklist" style="display:none">
+        <div class="sec-header"><div class="sec-title">PITCH CHECKLIST</div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:end;margin-bottom:24px">
+          <div style="flex:1;min-width:180px">
+            <div class="label" style="margin-bottom:8px">Your Industry</div>
+            <select id="cl-industry">
+              <option value="">Select industry</option>
+              <option>D2C / Consumer Brands</option>
+              <option>Food & Beverage</option>
+              <option>Healthcare / MedTech</option>
+              <option>EdTech</option>
+              <option>SaaS / B2B Tech</option>
+              <option>Fashion & Apparel</option>
+            </select>
+          </div>
+          <div style="flex:1;min-width:180px">
+            <div class="label" style="margin-bottom:8px">Your Stage</div>
+            <select id="cl-stage">
+              <option value="">Select stage</option>
+              <option value="idea">Idea Stage</option>
+              <option value="early">Early Revenue</option>
+              <option value="scaling">Scaling</option>
+            </select>
+          </div>
+          <button class="btn-primary" onclick="generateChecklist()">Generate Checklist</button>
+        </div>
+        <div id="checklist-output"></div>
+      </div>
+
+      <!-- Outline -->
+      <div id="tab-outline" style="display:none">
+        <div class="sec-header"><div class="sec-title">PITCH OUTLINE BUILDER</div></div>
+        <div class="step-row" id="outline-steps"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px" id="outline-step-labels"></div>
+        <div class="q-card" id="outline-card"></div>
+        <div style="display:flex;gap:8px;margin-top:16px" id="outline-nav"></div>
+        <div id="outline-result" style="display:none">
+          <div class="sec-header" style="margin-top:32px"><div class="sec-title" style="color:var(--green)">✓ PITCH OUTLINE READY</div></div>
+          <div id="outline-preview" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px"></div>
+          <button class="btn-primary" onclick="downloadOutline()">⬇ Download as Text File</button>
+          <button class="btn-outline" style="margin-left:8px" onclick="resetOutline()">Edit again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learning modules -->
+    <div style="margin-top:40px">
+      <div class="sec-header"><div class="sec-title">LEARNING MODULES</div></div>
+      <div id="modules-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODULE DETAIL ═══════════════ -->
+<div id="page-module-detail" class="page">
+  <div class="container section" id="module-detail-content"></div>
+</div>
+
+<footer style="border-top:1px solid var(--border);padding:32px;text-align:center;color:var(--muted);font-size:13px;position:relative;z-index:1;margin-top:40px">
+  <div>Shark Tank India Hub — built for fans and founders.</div>
+  <div style="margin-top:4px;font-size:11px;opacity:0.5">Not affiliated with Sony LIV or BBC Studios. Data for illustrative purposes.</div>
+</footer>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+
+const PITCHES = [
+  { id:'heads-up', season:1, ep:1, name:'Heads Up For Tails', industry:'Pets', type:'D2C + Retail', ask:'₹1.3Cr', askEq:1, askVal:130, funded:true, deal:'₹1.3Cr', dealEq:2, finalVal:65, sharks:['Aman','Anupam'], revenue:42, margin:55, summary:'Premium pet lifestyle brand with 60+ stores and a curated online store for pet parents across India.', founders:['Rashi Narang'], status:'active', deltaVal:-50 },
+  { id:'getaway', season:1, ep:2, name:'Get-A-Whey', industry:'Food & Beverage', type:'D2C', ask:'₹60L', askEq:10, askVal:6, funded:true, deal:'₹60L', dealEq:15, finalVal:4, sharks:['Namita','Vineeta'], revenue:3.2, margin:48, summary:'Gourmet ice cream made with whey protein — healthy indulgence for fitness-conscious consumers.', founders:['Jash Shah','Pashmi Shah'], status:'active', deltaVal:-33 },
+  { id:'skippi', season:1, ep:2, name:'Skippi Ice Pops', industry:'Food & Beverage', type:'D2C + Retail', ask:'₹50L', askEq:5, askVal:10, funded:true, deal:'₹50L', dealEq:5, finalVal:10, sharks:['Ashneer','Anupam','Aman','Namita','Vineeta'], revenue:2.8, margin:38, summary:"India's first ready-to-eat ice popsicle brand — all 5 sharks invested, a rare full-tank deal.", founders:['Ravi Kabra','Anuja Kabra'], status:'active', deltaVal:0 },
+  { id:'flatheads', season:1, ep:3, name:'Flatheads', industry:'Fashion & Apparel', type:'D2C', ask:'₹75L', askEq:5, askVal:15, funded:false, deal:'—', dealEq:0, finalVal:0, sharks:[], revenue:8.5, margin:52, summary:'Minimalist canvas sneakers built for everyday urban comfort — sharks felt valuation was too high for the scale.', founders:['Ganesh B','Bharat Uppal'], status:'active', deltaVal:null },
+  { id:'tagz', season:1, ep:3, name:'Tagz Foods', industry:'Food & Beverage', type:'D2C', ask:'₹60L', askEq:2, askVal:30, funded:true, deal:'₹60L', dealEq:3.5, finalVal:17.14, sharks:['Ashneer'], revenue:4.2, margin:45, summary:'Air-popped potato chips with 50% less fat — guilt-free snacking in 10+ bold flavors.', founders:['Anish Basu Roy','Sagar Bhalotia'], status:'active', deltaVal:-43 },
+  { id:'edurev', season:1, ep:4, name:'EduRev', industry:'EdTech', type:'SaaS', ask:'₹1.5Cr', askEq:5, askVal:30, funded:true, deal:'₹1.5Cr', dealEq:7, finalVal:21.4, sharks:['Peyush'], revenue:18, margin:68, summary:"YouTube of education — a collaborative learning platform with 20M+ students and 1M+ documents.", founders:['Vibhor Jain','Raman Lukose'], status:'active', deltaVal:-29 },
+  { id:'foxtale', season:2, ep:1, name:'Foxtale', industry:'Beauty & Skincare', type:'D2C', ask:'₹2Cr', askEq:1, askVal:200, funded:true, deal:'₹2Cr', dealEq:2, finalVal:100, sharks:['Namita'], revenue:24, margin:62, summary:'Science-backed skincare for Indian skin tones — formulated by dermatologists, priced for mass market.', founders:['Romita Mazumdar'], status:'active', deltaVal:-50 },
+  { id:'ketto', season:2, ep:2, name:'Ketto', industry:'Fintech', type:'Platform', ask:'₹5Cr', askEq:2, askVal:250, funded:false, deal:'—', dealEq:0, finalVal:0, sharks:[], revenue:85, margin:35, summary:"India's largest crowdfunding platform — raised ₹1,000Cr+ for medical causes. Sharks felt valuation was too stretched.", founders:['Varun Sheth','Zaheer Adenwala'], status:'active', deltaVal:null },
+  { id:'qpod', season:2, ep:3, name:'Qpod', industry:'EdTech', type:'Hardware + SaaS', ask:'₹80L', askEq:4, askVal:20, funded:true, deal:'₹80L', dealEq:6, finalVal:13.3, sharks:['Peyush','Amit'], revenue:2.4, margin:55, summary:'Interactive smart learning pods for preschools — combining AR, AI and gamified learning for ages 3–8.', founders:['Sanjay Verma'], status:'active', deltaVal:-34 },
+  { id:'gormei', season:3, ep:1, name:'Gormei', industry:'Food & Beverage', type:'D2C', ask:'₹75L', askEq:5, askVal:15, funded:true, deal:'₹75L', dealEq:10, finalVal:7.5, sharks:['Aman','Vineeta'], revenue:1.8, margin:40, summary:'Chef-curated regional Indian meals — subscription boxes celebrating India\'s diverse food cultures.', founders:['Aryan Khanna','Meera Pillai'], status:'active', deltaVal:-50 },
+  { id:'rupok', season:1, ep:4, name:'Rupok', industry:'Healthcare', type:'MedTech', ask:'₹40L', askEq:8, askVal:5, funded:false, deal:'—', dealEq:0, finalVal:0, sharks:[], revenue:0, margin:0, summary:'AI-powered diabetic wound care management platform — sharks weren\'t convinced on the market size and GTM.', founders:['Dr. Anand Kumar'], status:'pivoted', deltaVal:null },
+  { id:'booz', season:1, ep:1, name:'Booz Crusaders', industry:'Food & Beverage', type:'D2C', ask:'₹50L', askEq:10, askVal:5, funded:true, deal:'₹50L', dealEq:20, finalVal:2.5, sharks:['Anupam'], revenue:1.8, margin:42, summary:'Craft cocktail premixes made from natural ingredients, targeting the premium home bar segment.', founders:['Rahul Mehra','Priya Sharma'], status:'active', deltaVal:-50 },
+];
+
+const QUESTIONS = [
+  { id:1, cat:'Business Basics', text:'Explain your business in 30 seconds.', diff:1, tags:['elevator pitch','clarity','storytelling'], covers:['What problem you solve and for whom','Your unique solution in simple terms','One number that shows traction'], framing:'We help [customer] solve [problem] by [solution]. We\'ve already [traction].' },
+  { id:2, cat:'Business Basics', text:'What problem are you solving, and why does it matter?', diff:1, tags:['problem','market need','pain point'], covers:['A concrete relatable pain point — not just "the market is inefficient"','Evidence the problem exists','Why existing solutions fail your customer'], framing:'Every [customer] faces [pain]. Today they deal with it by [bad workaround], costing them [impact].' },
+  { id:3, cat:'Business Basics', text:'Who is your target customer and how do you reach them?', diff:2, tags:['ICP','distribution','CAC'], covers:['Clear demographic and psychographic profile','Specific acquisition channels with real CAC numbers','Why this customer segment first'], framing:'Our core customer is [profile]. We reach them through [channels] at a blended CAC of ₹X.' },
+  { id:4, cat:'Market', text:'How big is your market, and how did you arrive at that number?', diff:3, tags:['TAM','SAM','SOM','market size'], covers:['Bottom-up calculation, not just top-down market size','Distinction between TAM, SAM, and realistic addressable market','Credible sources'], framing:'India has ~X million [customers] spending ₹Y/year. Our realistic addressable market is ₹ZCr.' },
+  { id:5, cat:'Market', text:'Who are your top 3 competitors, and why will customers choose you?', diff:2, tags:['competition','moat','differentiation'], covers:['Honest acknowledgment of real competitors','Specific defensible differentiation','Your sustainable advantage (tech, brand, network effects)'], framing:'Our main competitors are A, B, C. Customers choose us because [advantage], which is hard to copy because [reason].' },
+  { id:6, cat:'Finance', text:'What is your gross margin, and what drives it?', diff:3, tags:['gross margin','COGS','unit economics'], covers:['Exact gross margin percentage','What is included in COGS','How margins change at scale and why'], framing:'Our gross margin is X%. COGS includes [components]. At 10x volume we expect Y% because [cost driver].' },
+  { id:7, cat:'Finance', text:'What is your CAC and LTV, and how long is your payback period?', diff:4, tags:['CAC','LTV','payback period'], covers:['Blended CAC across all channels','LTV based on real repeat purchase data','Payback period in months','LTV:CAC ratio benchmark'], framing:'Our blended CAC is ₹X. Average customer buys Y times for Z years, giving LTV of ₹W. Payback: N months.' },
+  { id:8, cat:'Finance', text:'Walk me through your P&L for last month.', diff:4, tags:['P&L','revenue','profitability'], covers:['Revenue breakdown by channel','Gross profit and margin','Key operating expenses','Net profit or burn rate'], framing:'Revenue ₹XCr. COGS ₹Y, gross profit ₹Z (X%). Opex: marketing ₹A, payroll ₹B. Net: ₹C.' },
+  { id:9, cat:'Valuation', text:'How did you arrive at your valuation?', diff:5, tags:['valuation','revenue multiple','comparables'], covers:['Revenue or EBITDA multiple used and why it\'s appropriate','Comparable company valuations','Future value justification if pre-revenue'], framing:'We\'re asking Xx annualised revenue. D2C brands at our growth rate trade at [range]. [Company] raised at similar multiples.' },
+  { id:10, cat:'Valuation', text:'What will you do with this money, and what milestones will it hit?', diff:3, tags:['use of funds','milestones','runway'], covers:['Specific allocation percentages','Concrete milestones at 12 and 24 months','How this gets you to the next fundable milestone'], framing:'₹X to [use 1 — X%], ₹Y to [use 2 — Y%]. In 18 months: ₹[revenue] and [milestone] enabling Series A.' },
+  { id:11, cat:'Operations', text:'How do you make your product, and what is your production capacity?', diff:3, tags:['manufacturing','supply chain','scalability'], covers:['Manufacturing model (in-house, contract, hybrid)','Current capacity vs demand','Lead times and key supplier dependencies','Plan to 10x production'], framing:'We manufacture at [location] with capacity X units/month vs demand Y. To 10x: [plan].' },
+];
+
+const MODULES = [
+  { id:'m1', title:'Nail Your 30-Second Elevator Pitch', cat:'Pitching', time:8, stages:['idea','early','scaling'], desc:'Sharks have seen hundreds of pitches. Yours needs to hook in 30 seconds.', sections:[{h:'The formula',t:'The best elevator pitches follow a simple structure: Who you help → What problem they face → How you solve it → One proof point. Don\'t try to say everything.'},{h:'What sharks listen for',t:'In the first 30 seconds, investors ask: Do I understand this? Do I believe this person? Is the market interesting? Jargon, backstory, and buried metrics kill pitches.'},{h:'Common mistakes',t:'Founders often start with the history of the problem. Others lead with market size — sharks have heard this a thousand times. Start with your customer\'s pain, then hit them with your solution and traction.'}], checkpoint:'Write your 30-second elevator pitch and read it aloud. Does a non-expert understand it immediately?' },
+  { id:'m2', title:'Unit Economics: CAC, LTV & Gross Margin', cat:'Finance', time:15, stages:['early','scaling'], desc:'The numbers sharks drill into hardest. Know these cold.', sections:[{h:'What is gross margin and why it matters',t:'Gross margin = (Revenue - COGS) / Revenue. It tells you how much you keep after making your product, before marketing or operating costs. A 15% gross margin D2C brand is in trouble; 60%+ gives room to grow.'},{h:'Customer Acquisition Cost (CAC)',t:'CAC = Total marketing & sales spend / Number of new customers. Track by channel. Your Instagram CAC and word-of-mouth CAC will be very different. Blended CAC should be compared to LTV.'},{h:'Lifetime Value (LTV)',t:'LTV = Average order value × Purchase frequency × Customer lifespan. Use real data, not projections. Show sharks your repeat purchase rate and cohort retention.'}], checkpoint:'Calculate your current CAC, LTV, and payback period. Is your LTV:CAC at least 3:1?' },
+  { id:'m3', title:'How to Justify Your Valuation', cat:'Finance', time:12, stages:['early','scaling'], desc:'Asking for too much is one of the most common pitch killers.', sections:[{h:'How investors think about valuation',t:'Sharks compare your ask against your revenue multiple, growth rate, and comparable deals. A 50x revenue multiple might be fine for high-growth SaaS with 80% margins, but absurd for a food brand growing 20% a year.'},{h:'Revenue multiples by sector',t:'D2C consumer brands: 3–8x revenue. SaaS: 8–20x ARR. EdTech: 5–12x. Healthcare services: 4–10x. Growth rate, margin profile, and moat all shift the range significantly.'},{h:'Bottom-up valuation approach',t:'Start from your 3-year revenue projection, apply a realistic exit multiple, and discount back to today. Check: does the implied return make sense for an early investor taking this risk?'}], checkpoint:'What revenue multiple is implied by your ask? How does it compare to similar deals in your industry?' },
+  { id:'m4', title:'Deal Structures: Equity, Debt & Royalty', cat:'Pitching', time:10, stages:['early','scaling'], desc:'Know the difference before you walk in.', sections:[{h:'Equity deals',t:'The most common deal type. The shark invests ₹X for Y% ownership. Valuation is implied: ₹1Cr for 10% = ₹10Cr post-money valuation. Simple, clean, permanent dilution.'},{h:'Debt deals',t:'The shark lends you money instead of buying equity. You repay with interest. Good if confident in cash flows. Bad if still burning — you\'re adding repayment pressure while trying to grow.'},{h:'Royalty deals',t:'Shark gets a % of revenue until they\'ve made Xx their investment, then it stops. Expensive capital (you give up revenue) but no equity dilution. Good for high-margin, cash-flow-positive businesses.'}], checkpoint:'Which deal structure makes most sense for your business right now, and why?' },
+];
+
+const OUTLINE_STEPS = [
+  { id:'problem', label:'Problem', prompt:'What problem do you solve and for whom?', hint:'Be specific. Name the person suffering the pain in concrete terms — not "the market is inefficient" but "X person wastes Y hours on Z every day."', placeholder:'e.g. Small restaurant owners in Tier 2 cities spend 3+ hours/day manually tracking inventory across WhatsApp and notebooks — causing 20–30% food wastage monthly.' },
+  { id:'solution', label:'Solution', prompt:'What is your solution and how does it work?', hint:'Describe your product in one sentence. Then explain the core mechanism. Avoid jargon. A 10-year-old should get the gist.', placeholder:'e.g. RestoPilot is a WhatsApp-first inventory management app that tracks stock automatically and raises purchase orders — no spreadsheets, no training needed.' },
+  { id:'market', label:'Market', prompt:'How big is your market?', hint:'Give a bottom-up number. "India has 7.5M restaurants; we target 1.2M in the ₹50K–₹5L/month revenue bracket" beats "the food-tech market is ₹X,000Cr."', placeholder:'e.g. 1.2M independent restaurants, each paying ₹2,500/month = ₹360Cr ARR addressable market.' },
+  { id:'traction', label:'Traction', prompt:'What have you achieved so far?', hint:'Lead with your best metric. Revenue, users, growth rate, retention, partnerships. If pre-revenue, lead with proof of demand.', placeholder:'e.g. 180 paying restaurants in 3 cities. ₹4.5L MRR. 92% month-1 retention. Growing 25% MoM for 4 months.' },
+  { id:'model', label:'Business Model', prompt:'How do you make money?', hint:'State the pricing model clearly. Include your gross margin. If multiple revenue streams, state which is primary.', placeholder:'e.g. SaaS at ₹2,500/month per outlet. Gross margin 78%. Add-ons at ₹500/month. No setup fee.' },
+  { id:'ask', label:'The Ask', prompt:'How much are you raising and what for?', hint:'State the number and equity clearly. Give a specific breakdown of use of funds — percentages to concrete activities.', placeholder:'e.g. ₹75L for 5% (₹15Cr valuation). 40% engineering, 35% sales, 25% marketing. Target: ₹20L MRR in 18 months.' },
+  { id:'team', label:'Your Team', prompt:'Why is your team the right one to build this?', hint:'Lead with relevant experience. Address missing skills and team depth proactively.', placeholder:'e.g. Founder: ex-Zomato (3 years ops + product). Co-founder: 10 years running restaurant chain. Advisor: ex-Zomato exec.' },
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+
+let activeFilters = { season: 'all', industry: 'all', deal: 'all' };
+let currentQIndex = 0;
+let currentRating = 0;
+let hintVisible = false;
+let outlineStep = 0;
+let outlineAnswers = {};
+let chartsInitialized = false;
+let currentStage = null;
+
+// ═══════════════════════════════════════════
+// PAGE ROUTING
+// ═══════════════════════════════════════════
+
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (page === 'seasons') renderPitchesTable();
+  if (page === 'analytics') initCharts();
+  if (page === 'learn') { renderModules(); initOutline(); }
+  if (page === 'dashboard') dbInitNav();
+}
+
+// ═══════════════════════════════════════════
+// PITCH TABLE
+// ═══════════════════════════════════════════
+
+function renderPitchesTable() {
+  const filtered = PITCHES.filter(p => {
+    if (activeFilters.season !== 'all' && p.season != activeFilters.season) return false;
+    if (activeFilters.industry !== 'all' && p.industry !== activeFilters.industry) return false;
+    if (activeFilters.deal === 'funded' && !p.funded) return false;
+    if (activeFilters.deal === 'nodeal' && p.funded) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('pitches-tbody');
+  tbody.innerHTML = filtered.map(p => `
+    <tr onclick="showPitchDetail('${p.id}')">
+      <td class="mono muted" style="font-size:12px">S${p.season} E${p.ep}</td>
+      <td>
+        <div style="font-weight:600;color:var(--heading)">${p.name}</div>
+        <div class="muted" style="font-size:11px">${p.type}</div>
+      </td>
+      <td><span class="badge badge-industry">${p.industry}</span></td>
+      <td class="mono" style="font-size:13px">${p.ask} / ${p.askEq}%</td>
+      <td class="mono" style="font-size:13px;color:${p.funded ? 'var(--green)' : 'var(--muted)'}">
+        ${p.funded ? p.deal + ' / ' + p.dealEq + '%' : '—'}
+      </td>
+      <td style="font-size:12px;color:var(--muted)">${p.sharks.join(', ') || '—'}</td>
+      <td>${p.funded ? '<span class="badge badge-funded">✓ Funded</span>' : '<span class="badge badge-nodeal">✗ No Deal</span>'}</td>
+    </tr>
+  `).join('');
+
+  document.getElementById('pitch-count').textContent = `Showing ${filtered.length} of ${PITCHES.length} pitches`;
+}
+
+function filterPitches(el) {
+  const filter = el.dataset.filter;
+  const val = el.dataset.val;
+  activeFilters[filter] = val;
+
+  // Update chip UI within same group
+  el.closest('.chips').querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderPitchesTable();
+}
+
+// ═══════════════════════════════════════════
+// PITCH DETAIL
+// ═══════════════════════════════════════════
+
+function showPitchDetail(id) {
+  const p = PITCHES.find(x => x.id === id);
+  if (!p) return;
+
+  const askVal = p.askVal;
+  const finalVal = p.finalVal;
+  const change = p.deltaVal;
+
+  const ownershipData = p.funded
+    ? [{ name: 'Founders', val: 100 - p.dealEq, color: '#E8192C' }, ...p.sharks.map((s,i) => ({ name: s, val: p.dealEq / p.sharks.length, color: ['#F5C518','#22C55E','#3B82F6','#8B5CF6','#F97316'][i%5] }))]
+    : [{ name: 'Founders', val: 100, color: '#E8192C' }];
+
+  const learnPoints = p.funded
+    ? `<li>They secured a deal — study their pitch structure and how they handled shark objections.</li>
+       ${p.margin > 50 ? `<li>Strong gross margin (${p.margin}%) gave sharks confidence in the business model's scalability.</li>` : ''}
+       ${p.sharks.length > 1 ? '<li>Multiple sharks co-invested — often signals strong fundamentals or very competitive negotiating.</li>' : ''}
+       ${change !== null && change < -20 ? `<li>⚠ Valuation dropped ${Math.abs(change)}% — ensure your ask is defensible from the start.</li>` : ''}`
+    : `<li>No deal was made — study what objections typically arise for ${p.industry} companies.</li>
+       <li>→ Research valuation benchmarks in your sector before setting your ask.</li>`;
+
+  const html = `
+    <div style="margin-bottom:8px">
+      <span class="muted" style="font-size:13px;cursor:pointer" onclick="showPage('seasons')">← All Pitches</span>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;align-items:start;justify-content:space-between;gap:12px;margin-bottom:8px">
+      <div>
+        <div class="display" style="font-size:clamp(32px,6vw,56px)">${p.name}</div>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:6px">
+          <span class="muted" style="font-size:13px">S${p.season} E${p.ep}</span>
+          <span class="muted">·</span>
+          <span class="badge badge-industry">${p.industry}</span>
+          <span class="muted">·</span>
+          <span class="muted" style="font-size:12px">${p.type}</span>
+          ${p.status === 'active' ? '<span style="color:var(--green);font-size:13px">● Active</span>' : p.status === 'pivoted' ? '<span style="color:#60a5fa;font-size:13px">● Pivoted</span>' : ''}
+        </div>
+      </div>
+      ${p.funded
+        ? '<span class="badge badge-funded" style="font-size:13px;padding:6px 16px">✓ FUNDED</span>'
+        : '<span class="badge badge-nodeal" style="font-size:13px;padding:6px 16px">✗ NO DEAL</span>'}
+    </div>
+
+    <div style="border-left:3px solid var(--red);padding:10px 16px;background:rgba(232,25,44,0.05);border-radius:0 10px 10px 0;margin-bottom:28px;font-size:14px;line-height:1.6;color:var(--text);opacity:0.9">${p.summary}</div>
+
+    <div class="detail-grid">
+      <div>
+        <!-- Deal block -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="display" style="font-size:22px;margin-bottom:18px">THE PITCH</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div>
+              <div class="label" style="margin-bottom:10px">What they asked for</div>
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+                <div style="display:flex;justify-content:space-between"><span class="muted">Amount</span><span class="mono" style="font-weight:600">${p.ask}</span></div>
+                <div style="display:flex;justify-content:space-between"><span class="muted">For equity</span><span class="mono" style="font-weight:600">${p.askEq}%</span></div>
+                <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:4px">
+                  <span class="muted tip" data-t="What founders think the company is worth">Valuation</span>
+                  <span class="mono" style="font-weight:600">₹${askVal}Cr</span>
+                </div>
+              </div>
+            </div>
+            ${p.funded ? `
+            <div>
+              <div class="label" style="margin-bottom:10px">Final deal</div>
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+                <div style="display:flex;justify-content:space-between"><span class="muted">Amount</span><span class="mono" style="font-weight:600;color:var(--green)">${p.deal}</span></div>
+                <div style="display:flex;justify-content:space-between"><span class="muted">Equity given</span><span class="mono" style="font-weight:600;color:var(--green)">${p.dealEq}%</span></div>
+                <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:8px;margin-top:4px">
+                  <span class="muted">Agreed valuation</span>
+                  <span class="mono" style="font-weight:600">₹${finalVal.toFixed(1)}Cr</span>
+                </div>
+              </div>
+            </div>` : '<div style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px">✗ No deal was made</div>'}
+          </div>
+          ${change !== null ? `
+          <div class="${change < 0 ? 'valuation-explainer' : 'valuation-explainer up'}" style="margin-top:16px">
+            ${change < 0 ? '📉' : '📈'} They originally valued the company at ₹${askVal}Cr. The final deal valued it at ₹${finalVal.toFixed(1)}Cr — <strong>${Math.abs(change)}% ${change < 0 ? 'lower' : 'higher'}</strong> than asked.${change < 0 ? ' Sharks pushed back significantly on valuation.' : ''}
+          </div>` : ''}
+        </div>
+
+        <!-- Sharks -->
+        ${p.funded && p.sharks.length > 0 ? `
+        <div class="card" style="margin-bottom:16px">
+          <div class="display" style="font-size:22px;margin-bottom:14px">SHARKS IN THIS DEAL</div>
+          ${p.sharks.map(s => `
+            <div class="shark-chip">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="shark-avatar">${s[0]}</div>
+                <span style="font-weight:500;color:var(--heading)">${s}</span>
+              </div>
+              <div style="display:flex;gap:16px;font-size:13px">
+                <span class="mono" style="color:var(--gold)">₹${(parseFloat(p.deal.replace(/[^0-9.]/g,'')) / p.sharks.length).toFixed(0)}${p.deal.includes('Cr') ? 'Cr' : 'L'}</span>
+                <span class="mono muted">${(p.dealEq / p.sharks.length).toFixed(1)}%</span>
+              </div>
+            </div>`).join('')}
+        </div>` : ''}
+
+        <!-- Financials -->
+        ${p.revenue > 0 ? `
+        <div class="card" style="margin-bottom:16px">
+          <div class="display" style="font-size:22px;margin-bottom:14px">FINANCIALS</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px">
+            <div style="text-align:center;padding:14px;background:var(--dark);border-radius:10px;border:1px solid var(--border)">
+              <div class="mono" style="font-size:22px;font-weight:600;color:var(--gold)">₹${p.revenue}Cr</div>
+              <div class="label" style="margin-top:4px">Revenue (ARR)</div>
+            </div>
+            ${p.margin > 0 ? `
+            <div style="text-align:center;padding:14px;background:var(--dark);border-radius:10px;border:1px solid var(--border)">
+              <div class="mono" style="font-size:22px;font-weight:600;color:var(--green)">${p.margin}%</div>
+              <div class="label" style="margin-top:4px">Gross Margin</div>
+            </div>` : ''}
+            ${p.funded && finalVal > 0 ? `
+            <div style="text-align:center;padding:14px;background:var(--dark);border-radius:10px;border:1px solid var(--border)">
+              <div class="mono" style="font-size:22px;font-weight:600;color:var(--heading)">${(finalVal / p.revenue).toFixed(1)}x</div>
+              <div class="label" style="margin-top:4px">Revenue Multiple</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:3px">Paid per ₹1 of revenue</div>
+            </div>` : ''}
+          </div>
+        </div>` : ''}
+
+        <!-- Learn from this -->
+        <div class="learn-box">
+          <div style="font-weight:600;margin-bottom:8px;color:var(--heading)">💡 What you can learn for your pitch</div>
+          <ul style="list-style:none;padding:0;font-size:13px">${learnPoints}</ul>
+          <div style="margin-top:12px;font-size:12px">
+            <span style="cursor:pointer;color:var(--red)" onclick="showPage('learn')">→ Practice investor Q&A for ${p.industry} startups</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts sidebar -->
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <div class="label" style="margin-bottom:12px">Ownership After Deal</div>
+          <div style="position:relative;height:180px;display:flex;align-items:center;justify-content:center">
+            <svg viewBox="0 0 120 120" width="180" height="180">
+              ${renderDonut(ownershipData)}
+            </svg>
+          </div>
+          <div class="pie-legend">
+            ${ownershipData.map(d => `
+              <div class="pie-row">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div class="pie-dot" style="background:${d.color}"></div>
+                  <span class="muted">${d.name}</span>
+                </div>
+                <span>${d.val.toFixed(1)}%</span>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        ${p.funded ? `
+        <div class="card" style="margin-bottom:14px">
+          <div class="label" style="margin-bottom:8px">Valuation: Asked vs Agreed</div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px">This compares the valuation founders asked for vs what they agreed to.</div>
+          ${renderValBar(askVal, finalVal)}
+        </div>` : ''}
+
+        <div class="card">
+          <div class="label" style="margin-bottom:10px">Related</div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:13px" onclick="showPage('learn')">
+              <span>Practice investor Q&A</span><span class="muted">→</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:13px" onclick="showTab('checklist');showPage('learn')">
+              <span>Generate pitch checklist</span><span class="muted">→</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;cursor:pointer;font-size:13px" onclick="showPage('analytics')">
+              <span>${p.industry} analytics</span><span class="muted">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('pitch-detail-content').innerHTML = html;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-pitch-detail').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function renderDonut(data) {
+  const total = data.reduce((s, d) => s + d.val, 0);
+  let startAngle = -Math.PI / 2;
+  const cx = 60, cy = 60, r = 44, innerR = 28;
+  let paths = '';
+  data.forEach(d => {
+    const angle = (d.val / total) * 2 * Math.PI;
+    const x1 = cx + r * Math.cos(startAngle);
+    const y1 = cy + r * Math.sin(startAngle);
+    const x2 = cx + r * Math.cos(startAngle + angle);
+    const y2 = cy + r * Math.sin(startAngle + angle);
+    const xi1 = cx + innerR * Math.cos(startAngle + angle);
+    const yi1 = cy + innerR * Math.sin(startAngle + angle);
+    const xi2 = cx + innerR * Math.cos(startAngle);
+    const yi2 = cy + innerR * Math.sin(startAngle);
+    const large = angle > Math.PI ? 1 : 0;
+    paths += `<path d="M${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${xi1},${yi1} A${innerR},${innerR} 0 ${large},0 ${xi2},${yi2} Z" fill="${d.color}" opacity="0.85"/>`;
+    startAngle += angle;
+  });
+  return paths;
+}
+
+function renderValBar(ask, final) {
+  const max = Math.max(ask, final) * 1.1;
+  const askW = (ask / max) * 100;
+  const finalW = (final / max) * 100;
+  return `
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:12px">
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span class="muted">Asked</span><span class="mono">₹${ask}Cr</span></div>
+        <div class="pbar"><div class="pbar-fill" style="width:${askW}%;background:var(--muted)"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span class="muted">Agreed</span><span class="mono" style="color:var(--green)">₹${final.toFixed(1)}Cr</span></div>
+        <div class="pbar"><div class="pbar-fill green" style="width:${finalW}%"></div></div>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════
+// SEASON DETAIL
+// ═══════════════════════════════════════════
+
+function showSeasonDetail(n) {
+  const pitches = PITCHES.filter(p => p.season === n);
+  const deals = pitches.filter(p => p.funded);
+  const invested = deals.reduce((s,p) => s + (p.finalVal || 0), 0);
+
+  document.getElementById('season-detail-content').innerHTML = `
+    <div style="margin-bottom:8px"><span class="muted" style="cursor:pointer;font-size:13px" onclick="showPage('seasons')">← All Seasons</span></div>
+    <div style="display:flex;align-items:end;gap:16px;margin-bottom:28px">
+      <div><div class="label">Season</div><div class="display" style="font-size:80px;color:var(--red);line-height:1">${n}</div></div>
+      <div class="muted" style="padding-bottom:10px">
+        <div>${[2021, 2023, 2024][n-1]}</div>
+        <div>${pitches.length} pitches in sample data</div>
+      </div>
+    </div>
+
+    <div class="stat-grid" style="margin-bottom:28px">
+      <div class="card stat-item"><div class="stat-num">${pitches.length}</div><div class="label" style="margin-top:4px">Sample Pitches</div></div>
+      <div class="card stat-item"><div class="stat-num" style="color:var(--green)">${deals.length}</div><div class="label" style="margin-top:4px">Deals</div></div>
+      <div class="card stat-item"><div class="stat-num">${Math.round((deals.length/pitches.length)*100)}%</div><div class="label" style="margin-top:4px">Deal Rate</div></div>
+      <div class="card stat-item"><div class="stat-num" style="color:var(--gold)">₹${invested.toFixed(0)}Cr</div><div class="label" style="margin-top:4px">Invested</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ep</th><th>Startup</th><th>Industry</th><th>Ask</th><th>Final Deal</th><th>Sharks</th><th>Status</th></tr></thead>
+        <tbody>
+          ${pitches.map(p => `
+            <tr onclick="showPitchDetail('${p.id}')">
+              <td class="mono muted" style="font-size:12px">E${p.ep}</td>
+              <td><div style="font-weight:600;color:var(--heading)">${p.name}</div><div class="muted" style="font-size:11px">${p.type}</div></td>
+              <td><span class="badge badge-industry">${p.industry}</span></td>
+              <td class="mono" style="font-size:13px">${p.ask} / ${p.askEq}%</td>
+              <td class="mono" style="font-size:13px;color:${p.funded ? 'var(--green)' : 'var(--muted)'}">
+                ${p.funded ? p.deal + ' / ' + p.dealEq + '%' : '—'}
+              </td>
+              <td style="font-size:12px;color:var(--muted)">${p.sharks.join(', ') || '—'}</td>
+              <td>${p.funded ? '<span class="badge badge-funded">✓ Funded</span>' : '<span class="badge badge-nodeal">✗ No Deal</span>'}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-season-detail').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════
+
+function initCharts() {
+  if (chartsInitialized) return;
+  chartsInitialized = true;
+
+  const isLight = document.documentElement.classList.contains('light');
+  const tickColor = isLight ? '#555570' : '#6b7280';
+  const legendColor = isLight ? '#555570' : '#9ca3af';
+  const gridColor = isLight ? '#e0e0ec' : '#1c1c2e';
+  const pitchBarColor = isLight ? '#d0d0e0' : '#1c1c2e';
+  const greenColor = isLight ? '#16a34a' : '#22C55E';
+
+  const chartDefaults = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: legendColor, font: { family: 'DM Sans', size: 11 }, boxWidth: 10 } } },
+    scales: {
+      x: { ticks: { color: tickColor, font: { family: 'DM Sans', size: 11 } }, grid: { color: gridColor } },
+      y: { ticks: { color: tickColor, font: { family: 'DM Sans', size: 11 } }, grid: { color: gridColor } }
+    }
+  };
+
+  // Season comparison
+  new Chart(document.getElementById('chartSeasons'), {
+    type: 'bar',
+    data: {
+      labels: ['Season 1', 'Season 2', 'Season 3'],
+      datasets: [
+        { label: 'Pitches', data: [198, 220, 260], backgroundColor: pitchBarColor, borderRadius: 6 },
+        { label: 'Deals', data: [117, 141, 158], backgroundColor: greenColor, borderRadius: 6 },
+      ]
+    },
+    options: { ...chartDefaults }
+  });
+
+  // Industry pie
+  new Chart(document.getElementById('chartIndustry'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Food & Bev', 'Fashion', 'EdTech', 'Healthcare', 'Beauty', 'Fintech', 'Pets', 'Other'],
+      datasets: [{ data: [96, 48, 41, 29, 33, 18, 16, 22], backgroundColor: ['#E8192C','#b07d00','#16a34a','#3B82F6','#8B5CF6','#F97316','#06B6D4','#EC4899'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'right', labels: { color: legendColor, font: { family: 'DM Sans', size: 11 }, boxWidth: 10 } } }
+    }
+  });
+
+  // Shark activity
+  new Chart(document.getElementById('chartSharks'), {
+    type: 'bar',
+    data: {
+      labels: ['Anupam', 'Namita', 'Vineeta', 'Peyush', 'Aman', 'Ghazal', 'Amit', 'Ashneer'],
+      datasets: [{ label: 'Deals', data: [72, 65, 61, 58, 54, 40, 34, 28], backgroundColor: '#E8192C', borderRadius: 6 }]
+    },
+    options: {
+      ...chartDefaults,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  // Deal structure
+  new Chart(document.getElementById('chartDealType'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Equity', 'Mixed', 'Debt', 'Royalty'],
+      datasets: [{ data: [321, 48, 32, 15], backgroundColor: ['#E8192C', isLight ? '#b07d00' : '#F5C518','#3B82F6', isLight ? '#16a34a' : '#22C55E'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'right', labels: { color: legendColor, font: { family: 'DM Sans', size: 11 }, boxWidth: 10 } } }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════
+// MOCK Q&A
+// ═══════════════════════════════════════════
+
+let filteredQs = [...QUESTIONS];
+let currentQ = QUESTIONS[0];
+
+function setQACat(el, cat) {
+  document.querySelectorAll('#qa-cats .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  filteredQs = cat === 'all' ? QUESTIONS : QUESTIONS.filter(q => q.cat === cat);
+  currentQIndex = 0;
+  hintVisible = false;
+  currentRating = 0;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (!filteredQs.length) return;
+  currentQ = filteredQs[currentQIndex % filteredQs.length];
+  const diffLabels = ['','Easy','Easy-Med','Medium','Hard','Expert'];
+  const diffColors = ['','var(--green)','var(--green)','var(--gold)','#fb923c','var(--red)'];
+  document.getElementById('q-cat-label').textContent = currentQ.cat;
+  document.getElementById('q-diff').textContent = diffLabels[currentQ.diff];
+  document.getElementById('q-diff').style.color = diffColors[currentQ.diff];
+  document.getElementById('q-text').textContent = currentQ.text;
+  document.getElementById('q-counter').textContent = `${(currentQIndex % filteredQs.length) + 1} / ${filteredQs.length}`;
+  document.getElementById('q-tags').innerHTML = currentQ.tags.map(t => `<span class="badge badge-industry">#${t}</span>`).join('');
+  document.getElementById('q-answer').value = '';
+  document.getElementById('q-hint').className = 'q-hint';
+  document.getElementById('q-hint').innerHTML = '';
+  document.querySelector('.stars').querySelectorAll('.star').forEach(s => s.classList.remove('on'));
+  document.getElementById('q-rating-label').textContent = '';
+  currentRating = 0;
+  hintVisible = false;
+}
+
+function nextQuestion() {
+  currentQIndex++;
+  renderQuestion();
+}
+
+function skipQuestion() {
+  currentQIndex++;
+  renderQuestion();
+}
+
+function setRating(n) {
+  currentRating = n;
+  const labels = ['','Needs work','Shaky','Decent','Solid','Nailed it!'];
+  document.querySelectorAll('.star').forEach((s,i) => s.classList.toggle('on', i < n));
+  document.getElementById('q-rating-label').textContent = labels[n];
+}
+
+function toggleHint() {
+  hintVisible = !hintVisible;
+  const hint = document.getElementById('q-hint');
+  if (hintVisible) {
+    hint.innerHTML = `
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Good answer covers:</div>
+      ${currentQ.covers.map(c => `<div style="display:flex;gap:6px;margin-bottom:6px;font-size:13px;color:var(--text)"><span style="color:var(--green);flex-shrink:0">✓</span>${c}</div>`).join('')}
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Example framing:</div>
+        <div style="font-size:13px;color:var(--muted);font-style:italic">${currentQ.framing}</div>
+      </div>`;
+    hint.classList.add('visible');
+  } else {
+    hint.classList.remove('visible');
+  }
+}
+
+// ═══════════════════════════════════════════
+// STAGE SELECTOR
+// ═══════════════════════════════════════════
+
+function selectStage(stage, el) {
+  currentStage = stage;
+  document.querySelectorAll('.stage-btn').forEach(b => {
+    b.style.borderColor = 'var(--border)';
+    b.style.background = 'var(--card)';
+    b.style.color = 'var(--text)';
+  });
+  el.style.borderColor = 'var(--red)';
+  el.style.background = 'rgba(232,25,44,0.08)';
+  renderModules();
+}
+
+// ═══════════════════════════════════════════
+// MODULES
+// ═══════════════════════════════════════════
+
+function renderModules() {
+  const filtered = currentStage
+    ? MODULES.filter(m => m.stages.includes(currentStage))
+    : MODULES;
+  document.getElementById('modules-list').innerHTML = filtered.map(m => `
+    <div class="module-item" onclick="showModuleDetail('${m.id}')">
+      <div>
+        <div style="display:flex;gap:6px;align-items:center;margin-bottom:5px">
+          <span class="module-cat">${m.cat}</span>
+          ${m.stages.map(s => `<span style="font-size:10px;color:var(--muted)">${s}</span>`).join(' ')}
+        </div>
+        <div style="font-weight:600;color:var(--heading)">${m.title}</div>
+        <div class="muted" style="font-size:13px;margin-top:2px">${m.desc}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+        <div class="muted" style="font-size:12px">⏱ ${m.time} min</div>
+        <span style="color:var(--muted)">›</span>
+      </div>
+    </div>`).join('');
+}
+
+function showModuleDetail(id) {
+  const m = MODULES.find(x => x.id === id);
+  if (!m) return;
+  const idx = MODULES.indexOf(m);
+  const next = MODULES[idx + 1];
+
+  document.getElementById('module-detail-content').innerHTML = `
+    <div style="margin-bottom:8px"><span class="muted" style="cursor:pointer;font-size:13px" onclick="showPage('learn')">← Get Ready</span></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span class="module-cat">${m.cat}</span>
+      <span class="muted" style="font-size:12px">⏱ ${m.time} min</span>
+    </div>
+    <div class="display" style="font-size:clamp(28px,4vw,42px);margin-bottom:6px">${m.title}</div>
+    <p class="muted" style="margin-bottom:32px;font-size:15px">${m.desc}</p>
+
+    <div style="display:flex;gap:4px;margin-bottom:32px">
+      ${m.sections.map((_,i) => `<div style="flex:1;height:4px;border-radius:2px;background:var(--red)"></div>`).join('')}
+      <div style="flex:1;height:4px;border-radius:2px;background:var(--border)"></div>
+    </div>
+
+    <div style="max-width:680px;display:flex;flex-direction:column;gap:28px;margin-bottom:36px">
+      ${m.sections.map((s,i) => `
+        <div>
+          <h2 style="font-size:17px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:10px;color:var(--heading)">
+            <span style="width:24px;height:24px;border-radius:50%;background:rgba(232,25,44,0.2);color:var(--red);font-size:11px;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</span>
+            ${s.h}
+          </h2>
+          <p style="color:var(--text);opacity:0.8;line-height:1.7;font-size:14px;padding-left:34px">${s.t}</p>
+        </div>`).join('')}
+    </div>
+
+    <div style="background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.2);border-radius:12px;padding:20px 24px;max-width:680px;margin-bottom:32px">
+      <div style="display:flex;gap:10px;margin-bottom:12px">
+        <span style="font-size:20px">✏️</span>
+        <div>
+          <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:4px">Checkpoint</div>
+          <p style="font-weight:600;color:var(--heading)">${m.checkpoint}</p>
+        </div>
+      </div>
+      <textarea rows="4" placeholder="Write your answer here..."></textarea>
+      <button class="btn-primary" style="margin-top:10px" onclick="this.textContent='✓ Saved';this.style.background='var(--green)';this.style.color='black'">Save Answer</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;max-width:680px;padding-top:20px;border-top:1px solid var(--border)">
+      <button class="btn-outline" onclick="showPage('learn')">← Back to modules</button>
+      ${next ? `
+      <button class="btn-outline" onclick="showModuleDetail('${next.id}')">
+        <div style="text-align:right">
+          <div class="muted" style="font-size:10px;text-align:left">Up next</div>
+          <div style="font-weight:500;color:var(--heading)">${next.title} →</div>
+        </div>
+      </button>` : ''}
+    </div>
+  `;
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-module-detail').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ═══════════════════════════════════════════
+// CHECKLIST
+// ═══════════════════════════════════════════
+
+const CHECKLIST_QS = {
+  'Business Basics': ['Explain your business in one sentence.','Who is your target customer, specifically?','What problem do you solve and how bad is that problem?','Why are you the right person to build this?'],
+  'Market & Competition': ['What is your total addressable market (bottom-up)?','Who are your 3 main competitors?','What is your defensible differentiation?','Why will your moat be hard to copy in 2 years?'],
+  'Unit Economics & Finance': ['What is your gross margin?','What is your blended CAC across channels?','What is your LTV and payback period?','Walk me through last month\'s P&L.'],
+  'Operations': ['How is your product made or delivered?','What are your current capacity constraints?','Who are your key suppliers and what is your dependency risk?'],
+  'Marketing': ['What are your top 3 channels by ROAS?','What is your offline vs online split?','How do you retain customers after the first purchase?'],
+  'Valuation & Deal': ['What revenue multiple are you applying and why?','What comparable companies support your valuation?','How will you use the investment and what milestones will it hit?','What does a successful outcome look like for you in 5 years?'],
+};
+
+function generateChecklist() {
+  const industry = document.getElementById('cl-industry').value;
+  const stage = document.getElementById('cl-stage').value;
+  if (!industry || !stage) { alert('Please select both industry and stage.'); return; }
+
+  // Filter based on stage
+  const skipForIdea = ['Unit Economics & Finance', 'Operations'];
+
+  const html = Object.entries(CHECKLIST_QS).map(([cat, qs]) => {
+    if (stage === 'idea' && skipForIdea.includes(cat)) return '';
+    return `
+      <div style="margin-bottom:24px">
+        <div class="display" style="font-size:16px;letter-spacing:2px;color:var(--muted);margin-bottom:10px">${cat}</div>
+        ${qs.map((q, i) => `
+          <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.checkmark').innerHTML=this.classList.contains('done')?'<svg width=11 height=11 viewBox=&quot;0 0 11 11&quot;><polyline points=&quot;1,6 4,9 10,1&quot; fill=&quot;none&quot; stroke=&quot;white&quot; stroke-width=&quot;2&quot;/></svg>':''">
+            <div class="checkmark"></div>
+            <span class="check-text" style="font-size:13px">${q}</span>
+          </div>`).join('')}
+      </div>`;
+  }).join('');
+
+  const total = Object.values(CHECKLIST_QS).flat().length;
+  document.getElementById('checklist-output').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div>
+        <div style="font-weight:600;color:var(--heading)">${industry} · ${stage === 'idea' ? 'Idea Stage' : stage === 'early' ? 'Early Revenue' : 'Scaling'}</div>
+        <div class="muted" style="font-size:12px">Click each question when you\'re ready to answer it confidently.</div>
+      </div>
+      <button class="btn-outline btn-sm" onclick="document.getElementById('checklist-output').innerHTML=''">Reset</button>
+    </div>
+    ${html}
+    <div style="text-align:center;padding:20px;background:rgba(232,25,44,0.05);border:1px solid rgba(232,25,44,0.2);border-radius:12px;margin-top:8px">
+      <p class="muted" style="font-size:13px;margin-bottom:12px">Want to practice answering these?</p>
+      <button class="btn-primary" onclick="showTab('mock')">→ Go to Mock Q&A</button>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════
+// PITCH OUTLINE BUILDER
+// ═══════════════════════════════════════════
+
+function initOutline() {
+  outlineStep = 0;
+  renderOutlineStep();
+}
+
+function renderOutlineStep() {
+  const steps = document.getElementById('outline-steps');
+  const labels = document.getElementById('outline-step-labels');
+  const card = document.getElementById('outline-card');
+  const nav = document.getElementById('outline-nav');
+
+  steps.innerHTML = OUTLINE_STEPS.map((s, i) => `
+    <div class="step-dot ${i < outlineStep ? 'done' : i === outlineStep ? 'active' : ''}" onclick="goOutlineStep(${i})" style="cursor:pointer"></div>`).join('');
+
+  labels.innerHTML = OUTLINE_STEPS.map((s, i) => `
+    <button onclick="goOutlineStep(${i})" style="padding:4px 10px;border-radius:8px;font-size:11px;border:1px solid var(--border);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;background:${i === outlineStep ? 'var(--red)' : outlineAnswers[s.id] ? 'rgba(34,197,94,0.1)' : 'var(--card2)'};color:${i === outlineStep ? 'white' : outlineAnswers[s.id] ? 'var(--green)' : 'var(--muted)'};border-color:${i === outlineStep ? 'var(--red)' : outlineAnswers[s.id] ? 'rgba(34,197,94,0.3)' : 'var(--border)'}">
+      ${s.label}
+    </button>`).join('');
+
+  const step = OUTLINE_STEPS[outlineStep];
+  card.innerHTML = `
+    <div class="label" style="margin-bottom:4px">Step ${outlineStep + 1} of ${OUTLINE_STEPS.length}</div>
+    <div style="font-size:18px;font-weight:600;margin-bottom:6px;color:var(--heading)">${step.prompt}</div>
+    <div class="muted" style="font-size:13px;margin-bottom:18px;line-height:1.6">${step.hint}</div>
+    <textarea rows="6" placeholder="${step.placeholder}" id="outline-textarea" style="line-height:1.6">${outlineAnswers[step.id] || ''}</textarea>`;
+
+  nav.innerHTML = `
+    ${outlineStep > 0 ? `<button class="btn-outline" onclick="saveAndMove(-1)">← Back</button>` : ''}
+    ${outlineStep < OUTLINE_STEPS.length - 1
+      ? `<button class="btn-primary" onclick="saveAndMove(1)">Next →</button>`
+      : `<button class="btn-primary" style="background:var(--green);color:black" onclick="finishOutline()">✓ Finish & Review</button>`}
+    ${Object.keys(outlineAnswers).length > 2 ? `<button class="btn-outline" style="margin-left:auto" onclick="finishOutline()">Preview →</button>` : ''}`;
+}
+
+function goOutlineStep(i) {
+  const ta = document.getElementById('outline-textarea');
+  if (ta) outlineAnswers[OUTLINE_STEPS[outlineStep].id] = ta.value;
+  outlineStep = i;
+  renderOutlineStep();
+}
+
+function saveAndMove(dir) {
+  const ta = document.getElementById('outline-textarea');
+  if (ta) outlineAnswers[OUTLINE_STEPS[outlineStep].id] = ta.value;
+  outlineStep = Math.max(0, Math.min(OUTLINE_STEPS.length - 1, outlineStep + dir));
+  renderOutlineStep();
+}
+
+function finishOutline() {
+  const ta = document.getElementById('outline-textarea');
+  if (ta) outlineAnswers[OUTLINE_STEPS[outlineStep].id] = ta.value;
+  document.getElementById('outline-card').style.display = 'none';
+  document.getElementById('outline-steps').style.display = 'none';
+  document.getElementById('outline-step-labels').style.display = 'none';
+  document.getElementById('outline-nav').style.display = 'none';
+
+  document.getElementById('outline-preview').innerHTML = OUTLINE_STEPS.map(s => `
+    <div class="card">
+      <div class="label" style="margin-bottom:6px">${s.label}</div>
+      <p style="font-size:13px;line-height:1.7;color:var(--text);opacity:0.85">${outlineAnswers[s.id] || '<em style="color:var(--muted)">Not filled in.</em>'}</p>
+    </div>`).join('');
+
+  document.getElementById('outline-result').style.display = 'block';
+}
+
+function downloadOutline() {
+  const text = OUTLINE_STEPS.map(s => `## ${s.label}\n\n${outlineAnswers[s.id] || '(not filled)'}`).join('\n\n---\n\n');
+  const blob = new Blob([`# My Pitch Outline\n\n${text}\n\n---\nGenerated by Shark Tank India Hub`], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'my-pitch-outline.txt';
+  a.click();
+}
+
+function resetOutline() {
+  outlineAnswers = {};
+  outlineStep = 0;
+  document.getElementById('outline-card').style.display = 'block';
+  document.getElementById('outline-steps').style.display = 'flex';
+  document.getElementById('outline-step-labels').style.display = 'flex';
+  document.getElementById('outline-nav').style.display = 'flex';
+  document.getElementById('outline-result').style.display = 'none';
+  renderOutlineStep();
+}
+
+// ═══════════════════════════════════════════
+// TAB SWITCHER (LEARN PAGE)
+// ═══════════════════════════════════════════
+
+function showTab(tab) {
+  ['mock','checklist','outline'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === tab ? 'block' : 'none';
+  });
+  if (tab === 'mock') renderQuestion();
+  if (tab === 'outline') renderOutlineStep();
+  document.getElementById('learn-tabs').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ═══════════════════════════════════════════
+// THEME TOGGLE
+// ═══════════════════════════════════════════
+
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-dark').classList.toggle('active', !isLight);
+  document.getElementById('theme-light').classList.toggle('active', isLight);
+  localStorage.setItem('sti-theme', isLight ? 'light' : 'dark');
+
+  // Rebuild charts with new colors if they exist
+  if (chartsInitialized) {
+    chartsInitialized = false;
+    Chart.instances && Object.values(Chart.instances).forEach(c => c.destroy());
+    setTimeout(initCharts, 50);
+  }
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('sti-theme');
+  const preferLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+  const useLightMode = saved ? saved === 'light' : preferLight;
+  if (useLightMode) {
+    document.documentElement.classList.add('light');
+    document.getElementById('theme-light').classList.add('active');
+  } else {
+    document.getElementById('theme-dark').classList.add('active');
+  }
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+
+let dbCurrentStep = 1;
+const DB_STEPS = [
+  { num:1, label:'Basics' },
+  { num:2, label:'Financials' },
+  { num:3, label:'Unit Econ' },
+  { num:4, label:'Ownership' },
+  { num:5, label:'Valuation' }
+];
+
+function dbInitNav() {
+  const nav = document.getElementById('db-step-nav');
+  if (!nav) return;
+  nav.innerHTML = DB_STEPS.map(s => `
+    <div onclick="dbGoStep(${s.num})" style="display:flex;align-items:center;gap:4px;cursor:pointer">
+      <div style="width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+        background:${s.num < dbCurrentStep ? 'var(--green)' : s.num === dbCurrentStep ? 'var(--red)' : 'var(--card2)'};
+        color:${s.num <= dbCurrentStep ? '#fff' : 'var(--muted)'};
+        border:2px solid ${s.num < dbCurrentStep ? 'var(--green)' : s.num === dbCurrentStep ? 'var(--red)' : 'var(--border)'};
+        transition:all 0.2s">${s.num < dbCurrentStep ? '✓' : s.num}</div>
+      <span style="font-size:11px;color:${s.num === dbCurrentStep ? 'var(--heading)' : 'var(--muted)'};font-weight:${s.num === dbCurrentStep ? 700 : 400}">${s.label}</span>
+      ${s.num < DB_STEPS.length ? `<div style="width:20px;height:2px;background:${s.num < dbCurrentStep ? 'var(--green)' : 'var(--border)'};margin:0 2px"></div>` : ''}
+    </div>`).join('');
+}
+
+function dbGoStep(n) {
+  if (n > dbCurrentStep) return; // can only go back or current
+  document.getElementById('db-step-' + dbCurrentStep).style.display = 'none';
+  dbCurrentStep = n;
+  document.getElementById('db-step-' + dbCurrentStep).style.display = 'block';
+  dbInitNav();
+}
+
+function dbNext(current) {
+  document.getElementById('db-step-' + current).style.display = 'none';
+  dbCurrentStep = current + 1;
+  document.getElementById('db-step-' + dbCurrentStep).style.display = 'block';
+  dbInitNav();
+  document.getElementById('db-form-wrap').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function dbBack(current) {
+  document.getElementById('db-step-' + current).style.display = 'none';
+  dbCurrentStep = current - 1;
+  document.getElementById('db-step-' + dbCurrentStep).style.display = 'block';
+  dbInitNav();
+  document.getElementById('db-form-wrap').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function updateMultiple(val) {
+  document.getElementById('db-multiple-display').textContent = parseFloat(val) + 'x';
+}
+
+function dbEdit() {
+  document.getElementById('db-output').style.display = 'none';
+  document.getElementById('db-form-wrap').style.display = 'block';
+  document.getElementById('db-step-nav').style.display = 'flex';
+  dbCurrentStep = 1;
+  DB_STEPS.forEach(s => {
+    const el = document.getElementById('db-step-' + s.num);
+    if (el) el.style.display = s.num === 1 ? 'block' : 'none';
+  });
+  dbInitNav();
+  window.scrollTo(0,0);
+}
+
+function dbVal(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  const v = el.value;
+  if (el.type === 'number') return v === '' ? null : parseFloat(v);
+  return v || null;
+}
+
+function fmtL(n) {
+  if (n === null || n === undefined) return '—';
+  if (Math.abs(n) >= 100) return '₹' + (n/100).toFixed(1) + 'Cr';
+  return '₹' + n.toFixed(1) + 'L';
+}
+
+function fmtCr(n) {
+  if (n === null || n === undefined) return '—';
+  return '₹' + n.toFixed(2) + ' Cr';
+}
+
+function healthColor(score) {
+  if (score >= 75) return 'var(--green)';
+  if (score >= 45) return 'var(--gold)';
+  return 'var(--red)';
+}
+
+function healthLabel(score) {
+  if (score >= 75) return 'Strong';
+  if (score >= 45) return 'Developing';
+  return 'High Risk';
+}
+
+function dbBuild() {
+  // ── collect inputs ──
+  const d = {
+    name:          dbVal('db-name') || 'Your Startup',
+    industry:      dbVal('db-industry') || '—',
+    stage:         dbVal('db-stage') || 'idea',
+    market:        dbVal('db-market') || '—',
+    customer:      dbVal('db-customer') || '—',
+    tagline:       dbVal('db-tagline') || '',
+    revenue:       dbVal('db-revenue'),       // ₹L ARR
+    mrr:           dbVal('db-mrr'),
+    grossMarginPct:dbVal('db-gross-margin'),
+    ebitda:        dbVal('db-ebitda'),
+    burn:          dbVal('db-burn'),
+    cash:          dbVal('db-cash'),
+    growthMoM:     dbVal('db-growth'),
+    grossProfit:   dbVal('db-gross-profit'),
+    cac:           dbVal('db-cac'),           // ₹
+    ltv:           dbVal('db-ltv'),
+    aov:           dbVal('db-aov'),
+    frequency:     dbVal('db-frequency'),
+    retention:     dbVal('db-retention'),
+    payback:       dbVal('db-payback'),
+    founderEq:     dbVal('db-founder-equity'),
+    investorEq:    dbVal('db-investor-equity'),
+    esop:          dbVal('db-esop'),
+    ask:           dbVal('db-ask'),           // ₹L
+    askEquity:     dbVal('db-ask-equity'),
+    raised:        dbVal('db-raised'),
+    multiple:      parseFloat(document.getElementById('db-multiple').value),
+    ebitdaMultiple:dbVal('db-ebitda-multiple'),
+    valuationAsk:  dbVal('db-valuation-ask'), // ₹Cr
+  };
+
+  // ── derived calculations ──
+  const runway = (d.cash && d.burn && d.burn > 0) ? Math.round(d.cash / d.burn) : null;
+  const ltvCacRatio = (d.ltv && d.cac && d.cac > 0) ? (d.ltv / d.cac) : null;
+  const revenueValuation = (d.revenue && d.revenue > 0) ? (d.revenue * d.multiple / 100) : null; // ₹Cr
+  const ebitdaValuation = (d.ebitda && d.ebitdaMultiple && d.ebitda > 0)
+    ? (d.ebitda * d.ebitdaMultiple / 100) : null;
+  const impliedValFromAsk = (d.ask && d.askEquity && d.askEquity > 0)
+    ? ((d.ask / d.askEquity) * 100 / 100) : null; // ₹Cr (ask/L → Cr)
+  const impliedValFromAskCr = impliedValFromAsk ? impliedValFromAsk / 100 : null;
+  const askValCr = d.ask ? d.ask / 100 : null;
+
+  const stageLabel = { idea:'Idea Stage', 'pre-revenue':'Pre-Revenue', early:'Early Revenue', scaling:'Scaling' }[d.stage] || d.stage;
+
+  // ── health score (0–100) ──
+  let score = 30; // base
+  if (d.stage === 'early') score += 5;
+  if (d.stage === 'scaling') score += 15;
+  if (ltvCacRatio && ltvCacRatio >= 3) score += 20;
+  else if (ltvCacRatio && ltvCacRatio >= 2) score += 10;
+  if (d.grossMarginPct && d.grossMarginPct >= 60) score += 15;
+  else if (d.grossMarginPct && d.grossMarginPct >= 40) score += 8;
+  if (runway && runway >= 12) score += 10;
+  else if (runway && runway >= 6) score += 5;
+  if (d.growthMoM && d.growthMoM >= 20) score += 10;
+  else if (d.growthMoM && d.growthMoM >= 10) score += 5;
+  if (d.ebitda && d.ebitda > 0) score += 10;
+  score = Math.min(score, 100);
+
+  // ── signals ──
+  const flags = [], strengths = [];
+  if (!d.revenue || d.revenue === 0) flags.push({ t:'No Revenue', d:'Pre-revenue companies face heavy valuation scrutiny. Sharks want PMF proof first.' });
+  if (ltvCacRatio !== null && ltvCacRatio < 2) flags.push({ t:'LTV:CAC Below 2x', d:`Your ratio is ${ltvCacRatio.toFixed(1)}x. Investors want 3x+ to feel confident in unit economics.` });
+  if (runway !== null && runway < 6) flags.push({ t:'Runway < 6 Months', d:`Only ${runway} months of runway. This signals desperation and weakens your negotiation position.` });
+  if (d.grossMarginPct !== null && d.grossMarginPct < 30) flags.push({ t:'Low Gross Margin', d:`${d.grossMarginPct}% gross margin limits scalability. Physical product cos. target 50%+; SaaS 70%+.` });
+  if (d.founderEq && d.founderEq < 51) flags.push({ t:'Founders Below Majority', d:'Founders holding under 51% can raise control concerns in early-stage deals.' });
+  if (d.valuationAsk && revenueValuation && d.valuationAsk > revenueValuation * 2) flags.push({ t:'Valuation May Be Stretched', d:`Your ask (₹${d.valuationAsk}Cr) is more than 2x your revenue-implied valuation (${fmtCr(revenueValuation)}).` });
+
+  if (d.grossMarginPct && d.grossMarginPct >= 60) strengths.push({ t:'Strong Gross Margins', d:`${d.grossMarginPct}% gross margin shows a scalable, capital-efficient model.` });
+  if (ltvCacRatio && ltvCacRatio >= 3) strengths.push({ t:'Healthy LTV:CAC Ratio', d:`${ltvCacRatio.toFixed(1)}x — well above the 3x benchmark investors look for.` });
+  if (runway && runway >= 12) strengths.push({ t:`${runway}-Month Runway`, d:'12+ months gives you negotiating power and time to hit milestones before the next raise.' });
+  if (d.growthMoM && d.growthMoM >= 20) strengths.push({ t:`${d.growthMoM}% MoM Growth`, d:'Consistent 20%+ monthly growth is a powerful signal of product-market fit.' });
+  if (d.ebitda && d.ebitda > 0) strengths.push({ t:'EBITDA Positive', d:'Rare at early stages — profitability signals disciplined execution and a real business model.' });
+
+  // ── render output ──
+  document.getElementById('db-form-wrap').style.display = 'none';
+  document.getElementById('db-step-nav').style.display = 'none';
+  document.getElementById('db-output').style.display = 'block';
+
+  // Header
+  document.getElementById('db-startup-header').innerHTML = `
+    <div style="display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+      <div>
+        <div class="display" style="font-size:clamp(28px,5vw,52px)">${d.name.toUpperCase()}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;align-items:center">
+          <span class="badge badge-industry">${d.industry}</span>
+          <span class="badge" style="background:rgba(232,25,44,0.1);color:var(--red);border:1px solid rgba(232,25,44,0.3)">${stageLabel}</span>
+          <span class="muted" style="font-size:13px">📍 ${d.market}</span>
+          ${d.tagline ? `<span class="muted" style="font-size:13px">· ${d.tagline}</span>` : ''}
+        </div>
+        ${d.customer ? `<div class="muted" style="font-size:12px;margin-top:6px">👤 Target: ${d.customer}</div>` : ''}
+      </div>
+      <div style="text-align:center;min-width:90px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:4px">Investor Score</div>
+        <div style="font-family:'Bebas Neue',cursive;font-size:52px;line-height:1;color:${healthColor(score)}">${score}</div>
+        <div style="font-size:12px;font-weight:700;color:${healthColor(score)}">${healthLabel(score)}</div>
+        <div style="width:80px;height:5px;background:var(--border);border-radius:3px;margin:6px auto 0;overflow:hidden">
+          <div style="height:100%;width:${score}%;background:${healthColor(score)};border-radius:3px;transition:width 1s ease"></div>
+        </div>
+      </div>
+    </div>`;
+
+  // KPI row
+  const kpis = [
+    { label:'ARR', val: d.revenue ? fmtL(d.revenue) : (d.stage === 'idea' ? 'Pre-Product' : 'Pre-Revenue'), color: d.revenue ? 'var(--gold)' : 'var(--muted)' },
+    { label:'Gross Margin', val: d.grossMarginPct !== null ? d.grossMarginPct + '%' : '—', color: d.grossMarginPct >= 60 ? 'var(--green)' : d.grossMarginPct >= 40 ? 'var(--gold)' : 'var(--red)' },
+    { label:'Runway', val: runway !== null ? runway + ' mo' : '—', color: runway >= 12 ? 'var(--green)' : runway >= 6 ? 'var(--gold)' : 'var(--red)' },
+    { label:'MoM Growth', val: d.growthMoM !== null ? d.growthMoM + '%' : '—', color: d.growthMoM >= 20 ? 'var(--green)' : d.growthMoM >= 10 ? 'var(--gold)' : 'var(--muted)' },
+    { label:'LTV : CAC', val: ltvCacRatio !== null ? ltvCacRatio.toFixed(1) + 'x' : '—', color: ltvCacRatio >= 3 ? 'var(--green)' : ltvCacRatio >= 2 ? 'var(--gold)' : 'var(--red)' },
+    { label:'EBITDA', val: d.ebitda !== null ? fmtL(d.ebitda) : '—', color: d.ebitda > 0 ? 'var(--green)' : d.ebitda === 0 ? 'var(--muted)' : 'var(--red)' },
+  ];
+  document.getElementById('db-kpi-row').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px">
+      ${kpis.map(k => `
+        <div class="card stat-item" style="padding:16px">
+          <div class="stat-num" style="font-size:28px;color:${k.color}">${k.val}</div>
+          <div class="label" style="margin-top:4px">${k.label}</div>
+        </div>`).join('')}
+    </div>`;
+
+  // Main grid: Financials + Runway
+  const burnBar = (d.cash && d.burn && d.burn > 0) ? Math.min((runway/24)*100, 100) : 0;
+  document.getElementById('db-main-grid').innerHTML = `
+    <div class="card">
+      <div class="display" style="font-size:18px;margin-bottom:16px">FINANCIALS</div>
+      <div style="display:flex;flex-direction:column;gap:10px;font-size:13px">
+        ${[
+          ['ARR', d.revenue !== null ? fmtL(d.revenue) : '—', ''],
+          ['MRR', d.mrr !== null ? fmtL(d.mrr) : '—', ''],
+          ['Gross Margin', d.grossMarginPct !== null ? d.grossMarginPct+'%' : '—', d.grossMarginPct >= 60 ? 'var(--green)' : d.grossMarginPct >= 40 ? 'var(--gold)' : 'var(--red)'],
+          ['Gross Profit (LM)', d.grossProfit !== null ? fmtL(d.grossProfit) : '—', ''],
+          ['EBITDA', d.ebitda !== null ? fmtL(d.ebitda) : '—', d.ebitda > 0 ? 'var(--green)' : 'var(--red)'],
+          ['MoM Revenue Growth', d.growthMoM !== null ? d.growthMoM+'%' : '—', d.growthMoM >= 20 ? 'var(--green)' : 'var(--muted)'],
+        ].map(([lbl,val,col]) => `
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
+            <span class="muted">${lbl}</span>
+            <span class="mono" style="font-weight:600;color:${col || 'var(--strong)'}">${val}</span>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="display" style="font-size:18px;margin-bottom:16px">RUNWAY & BURN</div>
+      ${runway !== null ? `
+        <div style="text-align:center;margin-bottom:18px">
+          <div class="stat-num" style="font-size:48px;color:${runway >= 12 ? 'var(--green)' : runway >= 6 ? 'var(--gold)' : 'var(--red)'}">${runway}</div>
+          <div class="label" style="margin-top:2px">Months of Runway</div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px"><span>0 mo</span><span>12 mo</span><span>24 mo</span></div>
+          <div class="pbar" style="height:8px">
+            <div class="pbar-fill" style="width:${burnBar}%;background:${runway >= 12 ? 'var(--green)' : runway >= 6 ? 'var(--gold)' : 'var(--red)'}"></div>
+          </div>
+        </div>` : '<div class="muted" style="font-size:13px;text-align:center;padding:20px 0">Enter cash + burn to calculate</div>'}
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+        ${[
+          ['Monthly Burn', d.burn !== null ? fmtL(d.burn) : '—', d.burn ? 'var(--red)' : ''],
+          ['Cash in Bank', d.cash !== null ? fmtL(d.cash) : '—', ''],
+          ['Total Raised', d.raised !== null ? fmtL(d.raised) : '—', ''],
+        ].map(([lbl,val,col]) => `
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)">
+            <span class="muted">${lbl}</span>
+            <span class="mono" style="color:${col || 'var(--strong)'};">${val}</span>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  // Unit economics
+  const ltvBarW = ltvCacRatio ? Math.min((ltvCacRatio/6)*100, 100) : 0;
+  const paybackBar = d.payback ? Math.min((d.payback/24)*100, 100) : 0;
+  document.getElementById('db-unit-econ').innerHTML = `
+    <div class="card">
+      <div class="display" style="font-size:18px;margin-bottom:16px">UNIT ECONOMICS</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+
+        <div>
+          <div class="label" style="margin-bottom:10px">CAC vs LTV</div>
+          ${d.cac !== null && d.ltv !== null ? `
+            <div style="display:flex;align-items:end;gap:12px;margin-bottom:12px">
+              <div style="text-align:center">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--red)">₹${d.cac.toLocaleString()}</div>
+                <div class="label">CAC</div>
+              </div>
+              <div style="font-size:20px;color:var(--muted);padding-bottom:8px">→</div>
+              <div style="text-align:center">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--green)">₹${d.ltv.toLocaleString()}</div>
+                <div class="label">LTV</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:${ltvCacRatio >= 3 ? 'var(--green)' : ltvCacRatio >= 2 ? 'var(--gold)' : 'var(--red)'}">${ltvCacRatio.toFixed(1)}x</div>
+                <div class="label">LTV:CAC</div>
+              </div>
+            </div>
+            <div class="pbar" style="height:8px;margin-bottom:4px">
+              <div style="height:100%;width:${ltvBarW}%;background:${ltvCacRatio >= 3 ? 'var(--green)' : ltvCacRatio >= 2 ? 'var(--gold)' : 'var(--red)'};border-radius:3px;transition:width 1s"></div>
+            </div>
+            <div style="font-size:11px;color:var(--muted)">Target: 3x+ (currently ${ltvCacRatio < 3 ? 'below' : 'above'} benchmark)</div>
+          ` : '<div class="muted" style="font-size:13px">Enter CAC + LTV to see analysis</div>'}
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+          <div class="label" style="margin-bottom:4px">Key Metrics</div>
+          ${[
+            ['AOV', d.aov !== null ? '₹'+d.aov.toLocaleString() : '—'],
+            ['Purchase Freq', d.frequency !== null ? d.frequency+'/yr' : '—'],
+            ['Avg Retention', d.retention !== null ? d.retention+' months' : '—'],
+            ['CAC Payback', d.payback !== null ? d.payback+' months' : '—'],
+          ].map(([lbl,val]) => `
+            <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+              <span class="muted">${lbl}</span>
+              <span class="mono" style="color:var(--strong)">${val}</span>
+            </div>`).join('')}
+          ${d.payback !== null ? `
+            <div style="margin-top:8px">
+              <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Payback period (target: <6 mo)</div>
+              <div class="pbar" style="height:6px">
+                <div style="height:100%;width:${paybackBar}%;background:${d.payback <= 6 ? 'var(--green)' : d.payback <= 12 ? 'var(--gold)' : 'var(--red)'};border-radius:3px;transition:width 1s"></div>
+              </div>
+            </div>` : ''}
+        </div>
+
+      </div>
+    </div>`;
+
+  // Valuation section
+  const vals = [];
+  if (revenueValuation) vals.push({ label: `Revenue × ${d.multiple}x Multiple`, val: revenueValuation, color: 'var(--gold)' });
+  if (ebitdaValuation) vals.push({ label: `EBITDA × ${d.ebitdaMultiple}x Multiple`, val: ebitdaValuation, color: 'var(--blue)' });
+  if (d.valuationAsk) vals.push({ label: 'Your Valuation Ask', val: d.valuationAsk, color: 'var(--red)' });
+  if (impliedValFromAskCr) vals.push({ label: `Implied by Equity Offer (${d.askEquity}% for ${fmtL(d.ask)})`, val: impliedValFromAskCr, color: 'var(--green)' });
+
+  const maxVal = vals.length ? Math.max(...vals.map(v => v.val)) : 1;
+  document.getElementById('db-valuation-section').innerHTML = `
+    <div class="card">
+      <div class="display" style="font-size:18px;margin-bottom:4px">VALUATION</div>
+      <div class="muted" style="font-size:12px;margin-bottom:20px">Based on revenue multiple + your ask — see how the numbers stack up</div>
+
+      ${vals.length ? `
+        <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px">
+          ${vals.map(v => `
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+                <span style="font-size:12px;color:var(--muted)">${v.label}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:${v.color}">${fmtCr(v.val)}</span>
+              </div>
+              <div class="pbar" style="height:8px">
+                <div style="height:100%;width:${Math.round((v.val/maxVal)*100)}%;background:${v.color};border-radius:3px;transition:width 1s ease"></div>
+              </div>
+            </div>`).join('')}
+        </div>
+
+        <div style="background:var(--card2);border-radius:10px;padding:14px 16px;font-size:13px">
+          <div class="label" style="margin-bottom:10px">Revenue Multiple Sensitivity</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px">
+            ${[2,4,6,8,10,15,20].map(m => {
+              const v = d.revenue ? (d.revenue * m / 100) : null;
+              const isSelected = Math.abs(m - d.multiple) < 0.5;
+              return `<div style="text-align:center;padding:8px;border-radius:8px;background:${isSelected ? 'rgba(245,197,24,0.15)' : 'transparent'};border:1px solid ${isSelected ? 'var(--gold)' : 'var(--border)'}">
+                <div style="font-size:11px;color:var(--muted)">${m}x</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:${isSelected ? 'var(--gold)' : 'var(--strong)'}">
+                  ${v !== null ? fmtCr(v) : '—'}
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      ` : `
+        <div class="muted" style="font-size:13px;text-align:center;padding:24px 0">
+          Enter revenue figures and set a multiple on the Valuation step to see your implied valuations.
+        </div>`}
+
+      ${d.ask ? `
+        <div style="margin-top:16px;padding:14px 16px;border-radius:10px;background:rgba(232,25,44,0.05);border:1px solid rgba(232,25,44,0.2)">
+          <div class="label" style="margin-bottom:8px">Your Funding Ask</div>
+          <div style="display:flex;flex-wrap:wrap;gap:20px;font-size:13px">
+            <div><span class="muted">Amount</span> <span class="mono" style="color:var(--red);font-weight:700">${fmtL(d.ask)}</span></div>
+            ${d.askEquity ? `<div><span class="muted">For equity</span> <span class="mono" style="font-weight:700;color:var(--text)">${d.askEquity}%</span></div>` : ''}
+            ${impliedValFromAskCr ? `<div><span class="muted">Implied valuation</span> <span class="mono" style="color:var(--green);font-weight:700">${fmtCr(impliedValFromAskCr)}</span></div>` : ''}
+          </div>
+        </div>` : ''}
+    </div>`;
+
+  // Ownership donut (SVG-based)
+  const own = [];
+  if (d.founderEq) own.push({ name:'Founders', pct: d.founderEq, color:'var(--red)' });
+  if (d.investorEq) own.push({ name:'Investors / Angels', pct: d.investorEq, color:'var(--blue)' });
+  if (d.esop) own.push({ name:'ESOP Pool', pct: d.esop, color:'var(--gold)' });
+  if (d.askEquity) own.push({ name:'New Investor (Ask)', pct: d.askEquity, color:'var(--green)' });
+  const totalPct = own.reduce((s,o) => s+o.pct, 0);
+  if (totalPct < 99 && totalPct > 0) own.push({ name:'Unallocated', pct: parseFloat((100-totalPct).toFixed(1)), color:'var(--border)' });
+
+  // Build SVG donut arcs
+  let svgArcs = '';
+  if (own.length > 0 && totalPct > 0) {
+    const cx=70, cy=70, r=54, strokeW=22;
+    let cumPct = 0;
+    const circum = 2 * Math.PI * r;
+    own.forEach(o => {
+      const slicePct = o.pct / 100;
+      const dash = slicePct * circum;
+      const gap = circum - dash;
+      const offset = circum * (1 - cumPct);
+      const colorStr = o.color.replace('var(--red)','#E8192C').replace('var(--blue)','#3B82F6')
+        .replace('var(--gold)','#F5C518').replace('var(--green)','#22C55E').replace('var(--border)','#1c1c2e');
+      svgArcs += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${colorStr}" stroke-width="${strokeW}"
+        stroke-dasharray="${dash.toFixed(2)} ${gap.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"
+        style="transition:stroke-dashoffset 0.5s ease" />`;
+      cumPct += slicePct;
+    });
+  }
+
+  document.getElementById('db-ownership-section').innerHTML = `
+    <div class="card">
+      <div class="display" style="font-size:18px;margin-bottom:16px">OWNERSHIP STRUCTURE</div>
+      ${own.length > 1 ? `
+        <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:center">
+          <svg width="140" height="140" viewBox="0 0 140 140" style="flex-shrink:0;transform:rotate(-90deg)">
+            <circle cx="70" cy="70" r="54" fill="none" stroke="var(--border)" stroke-width="22" />
+            ${svgArcs}
+            <text x="70" y="70" text-anchor="middle" dominant-baseline="central"
+              style="font-family:'Bebas Neue',cursive;font-size:18px;fill:var(--heading);transform:rotate(90deg);transform-origin:70px 70px">
+              ${totalPct.toFixed(0)}%
+            </text>
+          </svg>
+          <div style="flex:1;min-width:160px;display:flex;flex-direction:column;gap:8px">
+            ${own.map(o => {
+              const barColor = o.color.replace(/var\(--(\w+)\)/, (m,p1) => ({'red':'#E8192C','blue':'#3B82F6','gold':'#F5C518','green':'#22C55E','border':'#1c1c2e'}[p1] || '#888'));
+              return `<div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="font-size:12px;display:flex;align-items:center;gap:6px;color:var(--text)">
+                    <span style="width:8px;height:8px;border-radius:50%;background:${barColor};flex-shrink:0;display:inline-block"></span>
+                    ${o.name}
+                  </span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--heading)">${o.pct}%</span>
+                </div>
+                <div class="pbar">
+                  <div class="pbar-fill" style="width:${o.pct}%;background:${barColor}"></div>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>` : '<div class="muted" style="font-size:13px">Enter equity splits to see ownership breakdown.</div>'}
+    </div>`;
+
+  // Signals
+  document.getElementById('db-signals').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="card">
+        <div class="display" style="font-size:18px;margin-bottom:14px;color:var(--red)">⚠ RED FLAGS</div>
+        ${flags.length ? flags.map(f => `
+          <div style="display:flex;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+            <span style="font-size:16px;flex-shrink:0">🚩</span>
+            <div>
+              <div style="font-weight:600;font-size:13px;color:var(--heading);margin-bottom:2px">${f.t}</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.5">${f.d}</div>
+            </div>
+          </div>`).join('') : `<div style="color:var(--green);font-size:13px">✓ No major red flags detected based on your inputs.</div>`}
+      </div>
+      <div class="card">
+        <div class="display" style="font-size:18px;margin-bottom:14px;color:var(--green)">✦ STRENGTHS</div>
+        ${strengths.length ? strengths.map(s => `
+          <div style="display:flex;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+            <span style="font-size:16px;flex-shrink:0">✅</span>
+            <div>
+              <div style="font-weight:600;font-size:13px;color:var(--heading);margin-bottom:2px">${s.t}</div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.5">${s.d}</div>
+            </div>
+          </div>`).join('') : `<div class="muted" style="font-size:13px">Fill in more details to surface strengths.</div>`}
+      </div>
+    </div>`;
+
+  document.getElementById('db-output').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+
+initTheme();
+renderPitchesTable();
+renderModules();
+initOutline();
+</script>
+</body>
+</html>
